@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "747694275611",
+    "project_id": "seaaegis",
+    "storage_bucket": "seaaegis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747694275611:android:acb7d7e53ac75f97f24cbe",
+        "android_client_info": {
+          "package_name": "com.example.seaaegis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGoljXNJahEy0Nn763CNvox0qx-gEq4QM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
