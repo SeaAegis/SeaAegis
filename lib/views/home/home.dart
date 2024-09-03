@@ -19,8 +19,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppThemeProvider>(builder: (context, provider, _) {
-      return const Scaffold(
-        appBar: BasicAppBar(
+      return Scaffold(
+        appBar: const BasicAppBar(
           isBack: false,
           title: Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -34,21 +34,46 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SearchTextField(
+              const SearchTextField(
                 hintText: 'Search location...',
               ),
-              Text(
+              const SizedBox(
+                height: 12,
+              ),
+              const Text(
                 'Populor Beaches',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
               ),
+              const SizedBox(
+                height: 12,
+              ),
+              GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: const DecorationImage(
+                            fit: BoxFit.fitHeight, image: AssetImage(''))),
+                    child: const Stack(
+                      children: [
+                        Positioned(
+                            right: 0, top: 0, child: Icon(Icons.favorite)),
+                        Positioned(child: Text('Beach Name'))
+                      ],
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ),
