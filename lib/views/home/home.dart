@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
             child: Text(
               'Hi, Vishnu!',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -39,17 +39,16 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Text(
-              //   'Hi, Vishnu',
-              //   style: TextStyle(
-              //     fontSize: 18,
-              //     fontWeight: FontWeight.w600,
-              //   ),
-              // )
-
               SearchTextField(
                 hintText: 'Search location...',
-              )
+              ),
+              Text(
+                'Populor Beaches',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
         ),

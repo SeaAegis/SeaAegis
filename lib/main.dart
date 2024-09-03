@@ -28,16 +28,16 @@ class MyApp extends StatelessWidget {
       providers: AppProviders.providers,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'SeaAeigs',
         themeMode: ThemeMode.system,
         theme: lightTheme.copyWith(
             textTheme: GoogleFonts.dmSansTextTheme(
           Theme.of(context).textTheme,
         )),
-        darkTheme: darkTheme.copyWith(
-            textTheme: GoogleFonts.dmSansTextTheme(
-          Theme.of(context).textTheme,
-        )),
+        // darkTheme: darkTheme.copyWith(
+        //     textTheme: GoogleFonts.dmSansTextTheme(
+        //   Theme.of(context).textTheme,
+        // )),
         home: const HomePage(),
       ),
     );
