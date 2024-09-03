@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
               ),
               GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
+                    mainAxisSpacing: 6, crossAxisSpacing: 8, crossAxisCount: 2),
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: BoxDecoration(
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         Positioned(
                             right: 0, top: 0, child: Icon(Icons.favorite)),
-                        Positioned(child: Text('Beach Name'))
+                        Positioned(bottom: 0, child: Text('Beach Name'))
                       ],
                     ),
                   );
