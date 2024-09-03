@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:seaaegis/app/app_providers.dart';
 import 'package:seaaegis/firebase_options.dart';
+import 'package:seaaegis/views/beach_data/beach_stats.dart';
 
 import 'package:seaaegis/views/home/google_maps.dart';
 // import 'package:seaaegis/screens/home/searchbar.dart';
@@ -29,8 +31,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'SeaAeigs',
-        themeMode: ThemeMode.system,
-        theme: lightTheme.copyWith(
+        // themeMode: ThemeMode.system,
+        theme: appTheme.copyWith(
             textTheme: GoogleFonts.dmSansTextTheme(
           Theme.of(context).textTheme,
         )),
@@ -38,7 +40,8 @@ class MyApp extends StatelessWidget {
         //     textTheme: GoogleFonts.dmSansTextTheme(
         //   Theme.of(context).textTheme,
         // )),
-        home: const HomePage(),
+        // home: const HomePage(),
+        home: const BeachStats(),
       ),
     );
   }

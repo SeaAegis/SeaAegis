@@ -11,7 +11,7 @@ class SearchTextField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        hintStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         prefixIcon: const Icon(
           Icons.search,
           size: 26,
@@ -22,7 +22,8 @@ class SearchTextField extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         filled: true,
-        fillColor: const Color.fromARGB(117, 192, 223, 251),
+        // fillColor: const Color.fromARGB(117, 192, 223, 251),
+        fillColor: Colors.grey.shade100,
         contentPadding: const EdgeInsets.all(0),
       ),
     );

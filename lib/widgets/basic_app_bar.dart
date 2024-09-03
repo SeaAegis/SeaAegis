@@ -21,11 +21,11 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Navigator.of(context).pop();
               },
               icon: Container(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: context.isDarkMode
                       ? Colors.white.withOpacity(0.03)
-                      : Colors.black.withOpacity(0.04),
+                      : Colors.black.withOpacity(0.08),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(

@@ -9,6 +9,6 @@ class AppRoutes {
   static final routes = {
     loginRoute: (context) => const LoginScreen(),
     signupRoute: (context) => const SignUpScreen(),
-    homePageRoute: (context) => const HomeScreen(),
+    homePageRoute: (context) => HomeScreen(),
   };
 }
