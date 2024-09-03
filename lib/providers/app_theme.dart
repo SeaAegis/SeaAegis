@@ -7,12 +7,16 @@ class AppThemeProvider extends ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
 
   void toggleTheme(BuildContext context) {
+    print(context.isDarkMode);
     _themeMode = context.isDarkMode ? ThemeMode.light : ThemeMode.dark;
+    print(themeMode);
+
     notifyListeners();
   }
 
   void setTheme(ThemeMode themeMode) {
     _themeMode = themeMode;
+
     notifyListeners();
   }
 }

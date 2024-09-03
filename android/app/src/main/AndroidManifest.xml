@@ -3,6 +3,8 @@
         android:label="seaaegis"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDRp4qnlAs4-XtomM4k0eep-pkrLLLU_Jo"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
