@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "G:/SeaAegis/linux"
+    "cmake.sourceDirectory": "G:/SeaAegis/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
