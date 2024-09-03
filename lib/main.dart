@@ -7,11 +7,13 @@ import 'package:seaaegis/app/app_providers.dart';
 import 'package:seaaegis/firebase_options.dart';
 import 'package:seaaegis/views/beach_data/beach_stats.dart';
 
-import 'package:seaaegis/views/home/google_maps.dart';
+// import 'package:seaaegis/views/home/google_maps.dart';
 // import 'package:seaaegis/screens/home/searchbar.dart';
 import 'package:seaaegis/helpers/theme_data.dart';
+import 'package:seaaegis/maps/getuserlocation.dart';
 import 'package:seaaegis/views/home/home.dart';
 import 'package:seaaegis/views/home/widgets/searchbar.dart';
+// import 'package:seaaegis/views/home/widgets/searchbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
