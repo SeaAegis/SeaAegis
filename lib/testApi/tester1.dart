@@ -10,8 +10,8 @@ const double maxWaveHeightM = 2.0;
 const double maxSwellHeightM = 2.0;
 const double minVisibilityKm = 5.0;
 const double maxHumidity = 90.0;
-const double maxPrecipitation = 1; // Example threshold for precipitation
-const double minPressure = 1000.0; // Example threshold for pressure in hPa
+const double maxPrecipitation = 1.0;
+const double minPressure = 1000.0;
 
 class BeachConditions {
   final double airTempC;
@@ -39,25 +39,16 @@ class BeachConditions {
   });
 
   bool isSafeToVisit() {
-    bool temperatureSafe = airTempC >= minAirTempC && airTempC <= maxAirTempC;
-    bool waterTemperatureSafe = waterTempC <= maxWaterTempC;
-    bool windSpeedSafe = windSpeedMps <= maxWindSpeedMps;
-    bool waveHeightSafe = waveHeightM <= maxWaveHeightM;
-    bool swellHeightSafe = swellHeightM <= maxSwellHeightM;
-    bool visibilitySafe = visibilityKm >= minVisibilityKm;
-    bool humiditySafe = humidity <= maxHumidity;
-    bool precipitationSafe = precipitation <= maxPrecipitation;
-    bool pressureSafe = pressure >= minPressure;
-
-    return temperatureSafe &&
-        waterTemperatureSafe &&
-        windSpeedSafe &&
-        waveHeightSafe &&
-        swellHeightSafe &&
-        visibilitySafe &&
-        humiditySafe &&
-        precipitationSafe &&
-        pressureSafe;
+    return airTempC >= minAirTempC &&
+        airTempC <= maxAirTempC &&
+        waterTempC <= maxWaterTempC &&
+        windSpeedMps <= maxWindSpeedMps &&
+        waveHeightM <= maxWaveHeightM &&
+        swellHeightM <= maxSwellHeightM &&
+        visibilityKm >= minVisibilityKm &&
+        humidity <= maxHumidity &&
+        precipitation <= maxPrecipitation &&
+        pressure >= minPressure;
   }
 
   String getSafetyIssues() {
@@ -94,7 +85,7 @@ Future<List<BeachConditions>> fetchBeachConditions(
   try {
     final response = await http.get(Uri.parse(url), headers: {
       'Authorization':
-          '63f57188-69cf-11ef-a732-0242ac130004-63f571f6-69cf-11ef-a732-0242ac130004',
+          '36e0f190-69d9-11ef-968a-0242ac130004-36e0f230-69d9-11ef-968a-0242ac130004',
     });
 
     if (response.statusCode == 200) {
@@ -160,62 +151,4 @@ BeachConditions? findNextSafeHour(List<BeachConditions> conditionsList) {
     }
   }
   return null;
-}
-
-void main() async {
-  try {
-    print("Started");
-    double lat = 17.801910;
-    double lng = 83.397888;
-
-    DateTime currentTime = DateTime.now().toUtc();
-    print("Current IST Time: ${formatTimeToIST(currentTime)}");
-
-    List<BeachConditions> conditionsList = await fetchBeachConditions(lat, lng);
-    // print(conditionsList);
-    var i = 1;
-    for (var condition in conditionsList) {
-      print(
-          'Current Beach Conditions (Time: ${formatTimeToIST(condition.time)} IST):');
-      print(i);
-      print('airTempC: ${condition.airTempC}');
-      print('waterTempC: ${condition.waterTempC}');
-      print('windSpeedMps: ${condition.windSpeedMps}');
-      print('waveHeightM: ${condition.waveHeightM}');
-      print('swellHeightM: ${condition.swellHeightM}');
-      print('visibilityKm: ${condition.visibilityKm}');
-      print('humidity: ${condition.humidity}');
-      print('precipitation: ${condition.precipitation}');
-      print('pressure: ${condition.pressure}\n\n');
-      i++;
-    }
-
-    BeachConditions currentConditions = conditionsList.first;
-    print(
-        'Current Beach Conditions (Time: ${formatTimeToIST(currentConditions.time)} IST):');
-    print('airTempC: ${currentConditions.airTempC}');
-    print('waterTempC: ${currentConditions.waterTempC}');
-    print('windSpeedMps: ${currentConditions.windSpeedMps}');
-    print('waveHeightM: ${currentConditions.waveHeightM}');
-    print('swellHeightM: ${currentConditions.swellHeightM}');
-    print('visibilityKm: ${currentConditions.visibilityKm}');
-    print('humidity: ${currentConditions.humidity}');
-    print('precipitation: ${currentConditions.precipitation}');
-    print('pressure: ${currentConditions.pressure}');
-
-    String safetyMessage = currentConditions.getSafetyIssues();
-    print(safetyMessage);
-
-    if (!currentConditions.isSafeToVisit()) {
-      BeachConditions? bestTimeCondition = findNextSafeHour(conditionsList);
-      if (bestTimeCondition != null) {
-        print(
-            'The best time to visit is at ${formatTimeToIST(bestTimeCondition.time)} IST.');
-      } else {
-        print('No safe time to visit in the near future.');
-      }
-    }
-  } catch (e) {
-    print('Error is: $e');
-  }
 }

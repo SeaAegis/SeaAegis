@@ -198,6 +198,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.22"
+  flutter_sensors:
+    dependency: transitive
+    description:
+      name: flutter_sensors
+      sha256: "3ac86cd414eb127c4afb97b6d986996d5f4bd7e2223f5c9aea53c13a7022c7aa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -300,10 +308,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: "2776c66b3e97c6cdd58d1bd3281548b074b64f1fd5c8f82391f7456e38849567"
+      sha256: "6b6f10f0ce3c42f6552d1c70d2c28d764cf22bb487f50f66cca31dcd5194f4d6"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.5"
+    version: "4.0.4"
   google_maps:
     dependency: transitive
     description:
@@ -352,6 +360,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.10"
+  google_places_for_flutter:
+    dependency: "direct main"
+    description:
+      name: google_places_for_flutter
+      sha256: "038a1a4587d926c56bb68e68efc89d989a902954e13d412b17199ad28f640cf6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   html:
     dependency: transitive
     description:
@@ -364,10 +380,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "0.13.6"
   http_parser:
     dependency: transitive
     description:
@@ -384,6 +400,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.0"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.7"
   leak_tracker:
     dependency: transitive
     description:
@@ -416,6 +440,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  location:
+    dependency: transitive
+    description:
+      name: location
+      sha256: "9051959f6f2ccadd887b28b66e9cbbcc25b6838e37cf9e894c421ccc0ebf80b5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.0"
+  location_platform_interface:
+    dependency: transitive
+    description:
+      name: location_platform_interface
+      sha256: "62eeaf1658e92e4459b727f55a3c328eccbac8ba043fa6d262ac5286ad48384c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  location_web:
+    dependency: transitive
+    description:
+      name: location_web
+      sha256: "6c08c408a040534c0269c4ff9fe17eebb5a36dea16512fbaf116b9c8bc21545b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   matcher:
     dependency: transitive
     description:
@@ -565,6 +613,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smooth_compass:
+    dependency: "direct main"
+    description:
+      name: smooth_compass
+      sha256: "6439c8a72eb9451850a427c1ef05d047242ebb3455c1fd2a8ab918863f35509e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.17"
   source_span:
     dependency: transitive
     description:

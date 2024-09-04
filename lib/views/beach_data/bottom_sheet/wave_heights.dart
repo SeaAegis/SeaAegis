@@ -84,7 +84,9 @@ class WaveHeights extends StatelessWidget {
                         color:
                             data['type'] == 'High' ? Colors.red : Colors.green,
                       ),
-                      title: Text(data['time'] ?? ''),
+                      title: Text(data['time'] ?? '',
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold)),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
