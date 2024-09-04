@@ -6,11 +6,12 @@ import 'package:seaaegis/views/alerts/alert_message.dart';
 import 'package:seaaegis/views/beach_data/beach_stats.dart';
 import 'package:seaaegis/views/favorites/favorite.dart';
 import 'package:seaaegis/views/home/widgets/search_text_field.dart';
-import 'package:seaaegis/views/notifications/notifications.dart';
+
 import 'package:seaaegis/widgets/basic_app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  final Function()? onBack;
+  HomeScreen({super.key, this.onBack});
   final List<Beach> beaches = [
     Beach(image: 'assets/images/2633.jpg', name: 'Beach 1'),
     Beach(image: 'assets/images/5352.jpg', name: 'Beach 2'),
@@ -23,15 +24,10 @@ class HomeScreen extends StatelessWidget {
       return Scaffold(
         appBar: BasicAppBar(
           isBack: false,
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text(
-              'Hi, Vishnu!',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black),
-            ),
+          title: const Text(
+            'SeaAegis',
+            style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
           ),
           actions: [
             IconButton(
@@ -49,6 +45,16 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const Text(
+                  'Hi, Vishnu!',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 const SearchTextField(
                   hintText: 'Search location...',
                 ),

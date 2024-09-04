@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/views/beach_data/bottom_sheet/wave_heights.dart';
+import 'package:seaaegis/views/beach_data/bottom_sheet/wind_speed.dart';
 
 class WeatherInfoGrid extends StatelessWidget {
   final double windSpeed;
@@ -49,16 +51,39 @@ class WeatherInfoGrid extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           children: <Widget>[
             WeatherInfoCard(
+              onTap: () => showModalBottomSheet(
+                // sheetAnimationStyle: AnimationStyle(
+                //   curve: Curves.easeIn,
+                // ),
+
+                showDragHandle: true,
+                context: context,
+                builder: (context) => WindInformationSheet(),
+              ),
               icon: Icons.air,
               value: '$windSpeed km/h',
               label: 'Wind Speed',
             ),
             WeatherInfoCard(
+              onTap: () => showModalBottomSheet(
+                // sheetAnimationStyle: AnimationStyle(
+                //   curve: Curves.easeIn,
+                // ),
+
+                showDragHandle: true,
+                context: context,
+                builder: (context) => WindInformationSheet(),
+              ),
               icon: Icons.explore, // or use a custom icon for wind direction
               value: windDirection,
               label: 'Wind Direction',
             ),
             WeatherInfoCard(
+              onTap: () => showModalBottomSheet(
+                showDragHandle: true,
+                context: context,
+                builder: (context) => WaveHeights(),
+              ),
               icon: Icons.waves,
               value: '${waveHeight.toStringAsFixed(1)} m',
               label: 'Wave Height',
@@ -89,29 +114,34 @@ class WeatherInfoCard extends StatelessWidget {
   final IconData icon;
   final String value;
   final String label;
-
+  final Function()? onTap;
   const WeatherInfoCard({
     super.key,
     required this.icon,
     required this.value,
     required this.label,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 32, color: Colors.white),
-        const SizedBox(height: 8),
-        Text(value, style: const TextStyle(color: Colors.white, fontSize: 18)),
-        const SizedBox(height: 4),
-        Text(label,
-            style: const TextStyle(
-                color: Colors.black54,
-                fontSize: 12,
-                fontWeight: FontWeight.bold)),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 32, color: Colors.white),
+          const SizedBox(height: 8),
+          Text(value,
+              style: const TextStyle(color: Colors.white, fontSize: 18)),
+          const SizedBox(height: 4),
+          Text(label,
+              style: const TextStyle(
+                  color: Colors.black54,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold)),
+        ],
+      ),
     );
   }
 }
