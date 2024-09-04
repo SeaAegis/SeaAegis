@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:seaaegis/providers/beach_data_provider.dart';
 
 class CalendarWidget extends StatefulWidget {
@@ -47,7 +46,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(40), bottomLeft: Radius.circular(40)),
       ),
-      height: 100,
+      height: 80,
       child: ListView.builder(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,

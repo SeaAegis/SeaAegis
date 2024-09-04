@@ -46,6 +46,13 @@ class HourlyForecast extends StatelessWidget {
                             )
                           : null, // Dark gray for unselected items
                       borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade300,
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: const Offset(2, 3))
+                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

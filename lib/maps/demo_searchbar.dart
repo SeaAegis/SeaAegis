@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 
 class DemoSearchbar extends StatefulWidget {
   const DemoSearchbar({super.key});

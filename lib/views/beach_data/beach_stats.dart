@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:seaaegis/helpers/dark_mode.dart';
 import 'package:seaaegis/providers/beach_data_provider.dart';
 import 'package:seaaegis/views/beach_data/widgets/calender.dart';
 import 'package:seaaegis/views/beach_data/widgets/hourly_data.dart';
+import 'package:seaaegis/views/beach_data/widgets/weather_info.dart';
 import 'package:seaaegis/widgets/basic_app_bar.dart';
+
+import 'widgets/alert_box.dart';
 
 class BeachStats extends StatelessWidget {
   const BeachStats({super.key});
@@ -14,29 +16,13 @@ class BeachStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<BeachDataProvider>(builder: (context, provider, _) {
       return Scaffold(
-        // appBar: const BasicAppBar(
-        //   title: Text(
-        //     'Beach Name',
-        //     style: TextStyle(
-        //       fontSize: 22,
-        //       fontWeight: FontWeight.bold,
-        //     ),
-        //   ),
-        //   centerTitle: true,
-        //   // bottom: PreferredSize(
-        //   //   preferredSize: const Size.fromHeight(100),
-        //   //   child: CalendarWidget(
-        //   //     provider: provider,
-        //   //   ),
-        //   // ),
-        // ),
         body: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
@@ -44,9 +30,16 @@ class BeachStats extends StatelessWidget {
                       Color(0xFF3DA0F1),
                     ],
                   ),
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(40),
                       bottomLeft: Radius.circular(40)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.shade300,
+                        spreadRadius: 2,
+                        blurRadius: 8,
+                        offset: const Offset(2, 3))
+                  ],
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -60,12 +53,6 @@ class BeachStats extends StatelessWidget {
                         ),
                       ),
                       centerTitle: true,
-                      // bottom: PreferredSize(
-                      //   preferredSize: const Size.fromHeight(100),
-                      //   child: CalendarWidget(
-                      //     provider: provider,
-                      //   ),
-                      // ),
                     ),
                     CalendarWidget(
                       provider: provider,
@@ -78,10 +65,11 @@ class BeachStats extends StatelessWidget {
               ),
               HourlyForecast(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8)
+                    .copyWith(top: 0),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  // padding: const EdgeInsets.symmetric(horizontal: 16),
                   // height: 600,
                   decoration: BoxDecoration(
                       gradient: const LinearGradient(
@@ -104,7 +92,7 @@ class BeachStats extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Image(
                             height: 150,
@@ -136,6 +124,14 @@ class BeachStats extends StatelessWidget {
                   ),
                 ),
               ),
+              const AlertBox(isSafeToGo: false, bestTimeToGo: '9:40'),
+              const WeatherInfoGrid(
+                  windSpeed: 9,
+                  windDirection: 'North-East',
+                  waveHeight: 3.4,
+                  visibility: 5.4,
+                  precipitation: 3.4,
+                  humidity: 3.2)
             ],
           ),
         ),

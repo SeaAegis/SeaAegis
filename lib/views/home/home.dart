@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:seaaegis/helpers/dark_mode.dart';
 import 'package:seaaegis/providers/app_theme.dart';
-import 'package:seaaegis/services/assets/vector.dart';
 import 'package:seaaegis/views/alerts/alert_message.dart';
+import 'package:seaaegis/views/beach_data/beach_stats.dart';
 import 'package:seaaegis/views/favorites/favorite.dart';
 import 'package:seaaegis/views/home/widgets/search_text_field.dart';
 import 'package:seaaegis/views/notifications/notifications.dart';
 import 'package:seaaegis/widgets/basic_app_bar.dart';
-import 'package:seaaegis/widgets/theme_button.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
-  List<Beach> beaches = [
+  final List<Beach> beaches = [
     Beach(image: 'assets/images/2633.jpg', name: 'Beach 1'),
     Beach(image: 'assets/images/5352.jpg', name: 'Beach 2'),
     Beach(image: 'assets/images/6728.jpg', name: 'Beach 3'),
@@ -24,9 +21,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppThemeProvider>(builder: (context, provider, _) {
       return Scaffold(
-        appBar: const BasicAppBar(
+        appBar: BasicAppBar(
           isBack: false,
-          title: Padding(
+          title: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
               'Hi, Vishnu!',
@@ -36,6 +33,14 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.black),
             ),
           ),
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(size: 32, Icons.notifications_outlined)),
+            const SizedBox(
+              width: 24,
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
@@ -69,12 +74,18 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 18,
                 ),
-                const Text(
-                  'Populor Beaches',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Populor Beaches',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextButton(onPressed: () {}, child: const Text('See More'))
+                  ],
                 ),
                 const SizedBox(
                   height: 12,
@@ -87,36 +98,40 @@ class HomeScreen extends StatelessWidget {
                       crossAxisSpacing: 8,
                       crossAxisCount: 2),
                   itemBuilder: (context, index) {
-                    return Container(
-                      width: 140,
-                      height: 160,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage(beaches[index].image))),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                              right: 10,
-                              top: 10,
-                              child: CircleAvatar(
-                                  backgroundColor: Colors.grey.shade100,
-                                  child: const Icon(
-                                    Icons.favorite_border,
-                                    color: Colors.black,
-                                    size: 28,
-                                  ))),
-                          Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text(
-                                beaches[index].name,
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                              ))
-                        ],
+                    return GestureDetector(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const BeachStats())),
+                      child: Container(
+                        width: 140,
+                        height: 160,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage(beaches[index].image))),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                right: 10,
+                                top: 10,
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.grey.shade100,
+                                    child: const Icon(
+                                      Icons.favorite_border,
+                                      color: Colors.black,
+                                      size: 28,
+                                    ))),
+                            Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  beaches[index].name,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ))
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -139,7 +154,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PersistentTabController _controller;
-  bool showNav = false;
+  bool showNav = true;
 
   @override
   void initState() {
@@ -153,7 +168,6 @@ class _HomePageState extends State<HomePage> {
       HomeScreen(),
       const Favorites(),
       const AlertMessage(),
-      const Notifications()
     ];
   }
 
@@ -185,15 +199,15 @@ class _HomePageState extends State<HomePage> {
         title: "Alerts",
         inactiveColorPrimary: Colors.grey,
       ),
-      PersistentBottomNavBarItem(
-        contentPadding: 2,
-        iconSize: 30,
-        textStyle: const TextStyle(fontSize: 18),
-        inactiveIcon: const Icon(Icons.notifications),
-        icon: const Icon(Icons.notifications_outlined),
-        title: "Notifications",
-        inactiveColorPrimary: Colors.grey,
-      ),
+      // PersistentBottomNavBarItem(
+      //   contentPadding: 2,
+      //   iconSize: 30,
+      //   textStyle: const TextStyle(fontSize: 18),
+      //   inactiveIcon: const Icon(Icons.notifications),
+      //   icon: const Icon(Icons.notifications_outlined),
+      //   title: "Notifications",
+      //   inactiveColorPrimary: Colors.grey,
+      // ),
       // PersistentBottomNavBarItem(
       //   contentPadding: 2,
       //   iconSize: 30,
@@ -244,7 +258,7 @@ class _HomePageState extends State<HomePage> {
         //   duration: Duration(milliseconds: 200),
         // ),
         navBarStyle: NavBarStyle.style1,
-        // hideNavigationBar: showNav,
+        isVisible: showNav,
       ),
     );
   }
