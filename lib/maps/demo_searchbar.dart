@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 
-class Translator extends StatefulWidget {
-  const Translator({super.key});
+class DemoSearchbar extends StatefulWidget {
+  const DemoSearchbar({super.key});
 
   @override
-  State<Translator> createState() => _TranslatorState();
+  State<DemoSearchbar> createState() => _DemoSearchbarState();
 }
 
-class _TranslatorState extends State<Translator> {
+class _DemoSearchbarState extends State<DemoSearchbar> {
   String coordinates = "";
   TextEditingController placename = TextEditingController();
+
+  //user Location
+  // Future<Position> getuserlocation() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+
+  //   return await Geolocator.getCurrentPosition();
+  // }
+
   getdetails() async {
     if (placename.text.isNotEmpty) {
       List<Location> latlon = await locationFromAddress(placename.text);
-      print(latlon);
       coordinates = "${latlon.last.latitude},${latlon.last.longitude}";
     } else {
       showDialog(
@@ -39,6 +65,7 @@ class _TranslatorState extends State<Translator> {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: placename,

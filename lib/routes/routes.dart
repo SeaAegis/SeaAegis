@@ -1,6 +1,6 @@
-import 'package:seaaegis/screens/home/home.dart';
-import 'package:seaaegis/screens/auth/signin.dart';
-import 'package:seaaegis/screens/auth/signup.dart';
+import 'package:seaaegis/views/home/home.dart';
+import 'package:seaaegis/views/auth/signin.dart';
+import 'package:seaaegis/views/auth/signup.dart';
 
 class AppRoutes {
   static const String loginRoute = '/signin';
@@ -9,6 +9,6 @@ class AppRoutes {
   static final routes = {
     loginRoute: (context) => const LoginScreen(),
     signupRoute: (context) => const SignUpScreen(),
-    homePageRoute: (context) => const HomeScreen(),
+    homePageRoute: (context) => HomeScreen(),
   };
 }
