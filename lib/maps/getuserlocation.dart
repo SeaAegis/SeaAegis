@@ -5,10 +5,10 @@ class LocationExample extends StatefulWidget {
   const LocationExample({super.key});
 
   @override
-  _LocationExampleState createState() => _LocationExampleState();
+  LocationExampleState createState() => LocationExampleState();
 }
 
-class _LocationExampleState extends State<LocationExample> {
+class LocationExampleState extends State<LocationExample> {
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -31,7 +31,9 @@ class _LocationExampleState extends State<LocationExample> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    return await Geolocator.getCurrentPosition();
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
   }
 
   @override
@@ -46,6 +48,8 @@ class _LocationExampleState extends State<LocationExample> {
             try {
               Position position = await _determinePosition();
               print('Location: ${position.latitude}, ${position.longitude}');
+
+              
             } catch (e) {
               print('Error: $e');
             }

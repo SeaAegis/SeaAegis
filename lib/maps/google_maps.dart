@@ -3,41 +3,72 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RouteStaticFinding extends StatefulWidget {
-  const RouteStaticFinding({super.key, required});
+  final LatLng usercoordinates;
+  final LatLng beachcoordinates;
+
+  const RouteStaticFinding({
+    super.key,
+    required this.usercoordinates,
+    required this.beachcoordinates,
+  });
 
   @override
   State<RouteStaticFinding> createState() => _RouteStaticFindingState();
 }
 
 class _RouteStaticFindingState extends State<RouteStaticFinding> {
-  final CameraPosition initial = const CameraPosition(
-    target: LatLng(16.547370218933096, 81.51819666166557),
-    zoom: 15.0,
-  );
+  late final CameraPosition initial;
+  late final List<Marker> markerlist;
   final Completer<GoogleMapController> mapController = Completer();
-  List<Marker> mymarkers = [];
-  List<Marker> markerlist = [
-    const Marker(
-        markerId: MarkerId("First"),
-        position: LatLng(16.547370218933096, 81.51819666166557),
-        infoWindow: InfoWindow(title: "Bhimavaram")),
-    const Marker(
-        markerId: MarkerId("Second"),
-        position: LatLng(16.52390390949731, 81.70779065332044),
-        infoWindow: InfoWindow(title: "Palakollu")),
-  ];
+  bool isMapLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    initial = CameraPosition(
+      target: widget.beachcoordinates,
+      zoom: 10.0,
+    );
+    markerlist = [
+      Marker(
+        markerId: const MarkerId("First"),
+        position: widget.beachcoordinates,
+        infoWindow: const InfoWindow(title: "User Location"),
+      ),
+      Marker(
+        markerId: const MarkerId("Second"),
+        position: widget.usercoordinates,
+        infoWindow: const InfoWindow(title: "Beach Location"),
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: GoogleMap(
-        initialCameraPosition: initial,
-        markers: Set<Marker>.of(markerlist),
-        onMapCreated: (controller) {
-          mapController.complete(controller);
-        },
-      )),
+    return Container(
+        width: 300.0, 
+        height: 300.0, 
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black), 
+        ),
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition: initial,
+              markers: Set<Marker>.of(markerlist),
+              onMapCreated: (controller) {
+                mapController.complete(controller);
+                setState(() {
+                  isMapLoading = false;
+                });
+              },
+            ),
+            if (isMapLoading)
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+          ],
+        ),
     );
   }
 }

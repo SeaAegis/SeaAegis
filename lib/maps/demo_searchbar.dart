@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:seaaegis/maps/google_maps.dart';
 
 class DemoSearchbar extends StatefulWidget {
   const DemoSearchbar({super.key});
@@ -10,39 +12,45 @@ class DemoSearchbar extends StatefulWidget {
 }
 
 class _DemoSearchbarState extends State<DemoSearchbar> {
-  String coordinates = "";
+  String beach="";
+  String user="";
+  LatLng? usercoor;
+  LatLng? beachcoor;
   TextEditingController placename = TextEditingController();
 
   //user Location
-  // Future<Position> getuserlocation() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
+  Future<Position> getuserlocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return Future.error('Location services are disabled.');
-  //   }
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
 
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
 
-  //   if (permission == LocationPermission.deniedForever) {
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
 
-  //   return await Geolocator.getCurrentPosition();
-  // }
+    return await Geolocator.getCurrentPosition();
+    
+  }
 
+  // Get Beach Location
   getdetails() async {
     if (placename.text.isNotEmpty) {
       List<Location> latlon = await locationFromAddress(placename.text);
-      coordinates = "${latlon.last.latitude},${latlon.last.longitude}";
+      beach = "${latlon.last.latitude},${latlon.last.longitude}";
+      beachcoor = LatLng(latlon.last.latitude, latlon.last.longitude);
     } else {
       showDialog(
         context: context,
@@ -58,9 +66,24 @@ class _DemoSearchbarState extends State<DemoSearchbar> {
     setState(() {});
   }
 
+    @override
+    void initState() {
+      super.initState();
+      getuserlocation().then((value) {
+        user = "${value.latitude},${value.longitude}";
+        usercoor = LatLng(value.latitude, value.longitude);
+            }).catchError((error) {
+        print(error);
+      });
+    }
+
+      
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Beach Coordinates"),
       ),
@@ -83,9 +106,22 @@ class _DemoSearchbarState extends State<DemoSearchbar> {
           const SizedBox(
             height: 20,
           ),
-          Text(coordinates),
-        ],
-      ),
+          Text("Beach Cordinates $beach"),
+          const SizedBox(
+            height: 20,
+          ),
+          Text("User Cordinates $user"),
+          const SizedBox(height: 20,),
+
+          if(usercoor !=null && beachcoor !=null)
+              RouteStaticFinding(
+              usercoordinates: usercoor!,
+              beachcoordinates: beachcoor!,
+          ),
+              
+            ],
+          )
+          
     );
   }
 }
