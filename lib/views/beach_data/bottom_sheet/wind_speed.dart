@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:seaaegis/views/beach_data/bottom_sheet/compass.dart';
 
 class WindInformationSheet extends StatelessWidget {
   final List<Map<String, dynamic>> windData = [
@@ -51,8 +52,25 @@ class WindInformationSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Wind Information',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Wind Information',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                TextButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Get It in Next Update ')));
+                      // showBottomSheet(
+                      //   context: context,
+                      //   showDragHandle: true,
+                      //   builder: (context) => const CompassScreen(),
+                      // );
+                    },
+                    child: const Text('Show Compass'))
+              ],
+            ),
             const Divider(),
             const ListTile(
               leading: SizedBox(),
@@ -93,7 +111,9 @@ class WindInformationSheet extends StatelessWidget {
                   final data = windData[index];
                   return ListTile(
                     leading: Icon(data['icon'], color: Colors.blue),
-                    title: Text('${data['time']}'),
+                    title: Text('${data['time']}',
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold)),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

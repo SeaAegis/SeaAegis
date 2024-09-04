@@ -52,6 +52,7 @@ dependencies:
 
   http: any
   syncfusion_flutter_charts: ^26.2.12
+  smooth_compass: ^2.0.17
 dev_dependencies:
   flutter_test:
     sdk: flutter
