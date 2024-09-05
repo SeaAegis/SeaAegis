@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/testApi/tester1.dart'; // Assuming BeachConditions is imported from tester1.dart
 
 class HourlyForecast extends StatelessWidget {
-  final List<Map<String, dynamic>> hourlyData = [
-    {"time": "12:00", "temp": "26", "icon": Icons.wb_sunny},
-    {"time": "02:00", "temp": "28", "icon": Icons.cloud},
-    {"time": "04:00", "temp": "23", "icon": Icons.thunderstorm},
-    {"time": "06:00", "temp": "26", "icon": Icons.wb_sunny},
-    {"time": "08:00", "temp": "28", "icon": Icons.cloud},
-  ];
+  final List<BeachConditions> conditionList;
 
-  HourlyForecast({super.key});
+  const HourlyForecast({super.key, required this.conditionList});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +16,9 @@ class HourlyForecast extends StatelessWidget {
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           scrollDirection: Axis.horizontal,
-          itemCount: hourlyData.length,
+          itemCount: conditionList.length,
           itemBuilder: (context, index) {
-            final item = hourlyData[index];
+            final item = conditionList[index];
             final bool isSelected = index == 1;
 
             return Padding(
@@ -44,35 +39,33 @@ class HourlyForecast extends StatelessWidget {
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                             )
-                          : null, // Dark gray for unselected items
+                          : null,
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 2,
-                            blurRadius: 8,
-                            offset: const Offset(2, 3))
+                          color: Colors.grey.shade300,
+                          spreadRadius: 2,
+                          blurRadius: 8,
+                          offset: const Offset(2, 3),
+                        ),
                       ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Display time from the conditionList
                         Text(
-                          item['time'],
+                          "${item.time.hour}:00", // Displaying hour in HH:00 format
                           style: TextStyle(
-                              color: isSelected ? Colors.white : Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Icon(
-                          item['icon'],
-                          color:
-                              isSelected ? Colors.white : Colors.grey.shade300,
-                          size: 24,
+                            color: isSelected ? Colors.white : Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 4),
+                        // Display temperature from the conditionList
                         Text(
-                          "${item['temp']}°",
+                          "${item.airTempC}°", // Temperature in Celsius
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.black54,
                             fontSize: 18,

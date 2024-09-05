@@ -8,8 +8,9 @@ import 'package:seaaegis/widgets/basic_app_bar.dart';
 
 class BeachStats extends StatefulWidget {
   final BeachConditions beachConditions;
-
-  const BeachStats({super.key, required this.beachConditions});
+  final List<BeachConditions> conditionList;
+  const BeachStats(
+      {super.key, required this.beachConditions, required this.conditionList});
 
   @override
   State<BeachStats> createState() => _BeachStatsState();
@@ -19,9 +20,7 @@ class _BeachStatsState extends State<BeachStats> {
   @override
   Widget build(BuildContext context) {
     final condition = widget.beachConditions;
-    bool isSafeToGo = condition.isSafeToVisit();
-    String bestTimeToGo = formatTimeToIST(condition.time);
-
+    final conditionList = widget.conditionList;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -39,7 +38,9 @@ class _BeachStatsState extends State<BeachStats> {
               centerTitle: true,
             ),
             const SizedBox(height: 12),
-            HourlyForecast(),
+            HourlyForecast(
+              conditionList: conditionList,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8)
                   .copyWith(top: 0),
@@ -100,7 +101,9 @@ class _BeachStatsState extends State<BeachStats> {
                 ),
               ),
             ),
-            AlertBox(isSafeToGo: isSafeToGo, bestTimeToGo: bestTimeToGo),
+            AlertBox(
+              beachConditions: condition,
+            ),
             WeatherInfoGrid(
               windSpeed: condition.windSpeedMps,
               windDirection: 'North-East', // Example direction

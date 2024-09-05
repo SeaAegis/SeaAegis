@@ -61,7 +61,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => BeachStats(beachConditions: currentCondition),
+          builder: (context) => BeachStats(
+              beachConditions: currentCondition, conditionList: conditionsList),
         ),
       );
     } catch (e) {

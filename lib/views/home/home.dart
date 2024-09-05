@@ -120,6 +120,7 @@ class HomeScreen extends StatelessWidget {
                                   pressure: 1015.0,
                                   time: DateTime.now(), // No const here
                                 ),
+                                conditionList: const [],
                               ))),
                       child: Container(
                         width: 140,

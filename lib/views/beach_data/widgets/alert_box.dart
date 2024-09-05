@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/testApi/tester1.dart';
 
-class AlertBox extends StatelessWidget {
-  final bool isSafeToGo;
-  final String bestTimeToGo;
-  const AlertBox(
-      {super.key, required this.isSafeToGo, required this.bestTimeToGo});
+class AlertBox extends StatefulWidget {
+  // final bool isSafeToGo;
+  // final String bestTimeToGo;
+  final BeachConditions beachConditions;
+  const AlertBox({super.key, required this.beachConditions});
 
   @override
+  State<AlertBox> createState() => _AlertBoxState();
+}
+
+class _AlertBoxState extends State<AlertBox> {
+  @override
   Widget build(BuildContext context) {
+    final condition = widget.beachConditions;
+    bool isSafeToGo = condition.isSafeToVisit();
+    String bestTimeToGo = formatTimeToIST(condition.time);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Container(
@@ -35,7 +44,7 @@ class AlertBox extends StatelessWidget {
             Text(
               isSafeToGo
                   ? 'It is safe to go to the beach'
-                  : 'Not safe to go to the beach',
+                  : condition.getSafetyIssues(),
               style: TextStyle(
                 color: isSafeToGo ? Colors.green : Colors.red,
                 fontSize: 18,
@@ -44,7 +53,7 @@ class AlertBox extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Best time to go: $bestTimeToGo',
+              'Best time to go: ${bestTimeToGo.substring(0, 16)}',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
