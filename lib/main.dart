@@ -6,7 +6,6 @@ import 'package:seaaegis/app/app_providers.dart';
 import 'package:seaaegis/firebase_options.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seaaegis/helpers/theme_data.dart';
-import 'package:seaaegis/maps/autofill_search.dart';
 // import 'package:seaaegis/maps/getuserlocation.dart';
 // import 'package:seaaegis/views/home/home.dart';
 // import 'package:seaaegis/views/home/widgets/searchbar.dart';
@@ -14,9 +13,9 @@ import 'package:seaaegis/maps/autofill_search.dart';
 import 'package:seaaegis/maps/demo_searchbar.dart';
 import 'package:seaaegis/maps/getuserlocation.dart';
 import 'package:seaaegis/maps/google_maps.dart';
-import 'package:seaaegis/maps/google_maps_marker.dart';
-
-
+import 'package:seaaegis/maps/joined.dart';
+import 'package:seaaegis/maps/static_marker.dart';
+import 'package:seaaegis/views/home/widgets/searchbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,19 +33,18 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: AppProviders.providers,
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'SeaAeigs',
-        themeMode: ThemeMode.system,
-        theme: lightTheme.copyWith(
-            textTheme: GoogleFonts.dmSansTextTheme(
-          Theme.of(context).textTheme,
-        )),
-        // darkTheme: darkTheme.copyWith(
-        //     textTheme: GoogleFonts.dmSansTextTheme(
-        //   Theme.of(context).textTheme,
-        // )),
-        home: AutoFillMaps()
-      ),
+          debugShowCheckedModeBanner: false,
+          title: 'SeaAeigs',
+          themeMode: ThemeMode.system,
+          theme: lightTheme.copyWith(
+              textTheme: GoogleFonts.dmSansTextTheme(
+            Theme.of(context).textTheme,
+          )),
+          // darkTheme: darkTheme.copyWith(
+          //     textTheme: GoogleFonts.dmSansTextTheme(
+          //   Theme.of(context).textTheme,
+          // )),
+          home: Joined()),
     );
   }
 }

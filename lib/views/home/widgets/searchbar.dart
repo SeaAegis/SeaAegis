@@ -1,7 +1,7 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_places_for_flutter/google_places_for_flutter.dart';
-
 import 'package:seaaegis/services/search_service.dart';
 
 class Translator extends StatefulWidget {
@@ -14,15 +14,12 @@ class Translator extends StatefulWidget {
 class _TranslatorState extends State<Translator> {
   String coordinates = "";
   TextEditingController placename = TextEditingController();
-  getdetails() async {
+  List<dynamic> autocompleteResults = [];
+
+  Future<void> getdetails() async {
     if (placename.text.isNotEmpty) {
-      List<Location> latlon = await locationFromAddress(placename.text);
       final res = await searchLocation(placename.text);
-      print("search location $res");
-      coordinates = "${latlon.last.latitude},${latlon.last.longitude}";
-      final res1 =
-          await findNearbyBeaches(latlon.last.latitude, latlon.last.longitude);
-      print("findNearbyBeaches $res1");
+      print("Searched coordinaes : res[0]['display_name']");
     } else {
       showDialog(
         context: context,
@@ -33,9 +30,26 @@ class _TranslatorState extends State<Translator> {
           );
         },
       );
-      return;
     }
-    setState(() {});
+  }
+
+  Future<void> fetchAutocompleteResults(String query) async {
+    if (query.isEmpty) return;
+
+    final url = Uri.parse(
+      'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=5',
+    );
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var res = json.decode(response.body);
+      setState(() {
+        autocompleteResults = res;
+      });
+    } else {
+      throw Exception('Failed to load autocomplete results');
+    }
   }
 
   @override
@@ -58,22 +72,29 @@ class _TranslatorState extends State<Translator> {
                 borderRadius: BorderRadius.all(Radius.circular(30)),
               ),
             ),
-          ),
-          ElevatedButton(onPressed: getdetails, child: const Text("click me")),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(coordinates),
-          SearchGooglePlacesWidget(
-            placeType: PlaceType
-                .region, // PlaceType.cities, PlaceType.geocode, PlaceType.region etc
-            placeholder: 'Enter the address',
-            apiKey: 'Your Google Map API Key goes here',
-            onSearch: (Place place) {},
-            onSelected: (Place place) async {
-              print('address ${place.description}');
+            onChanged: (String val) {
+              fetchAutocompleteResults(val);
             },
           ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: autocompleteResults.length,
+              itemBuilder: (context, index) {
+                var result = autocompleteResults[index];
+                return Container(
+                    child: ListTile(
+                  title: Text(result['display_name']),
+                  onTap: () {
+                    setState(() {
+                      placename.text = result['display_name'];
+                      coordinates = "${result['lat']},${result['lon']}";
+                    });
+                  },
+                ));
+              },
+            ),
+          ),
+          Text(coordinates),
         ],
       ),
     );

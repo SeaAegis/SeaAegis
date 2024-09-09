@@ -5,17 +5,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seaaegis/maps/google_maps.dart';
 import 'package:seaaegis/services/search_service.dart';
-// import 'package:seaaegis/services/search/search_service.dart';
-// import 'package:seaaegis/views/search/widgets/google_map.dart';
 
-class DemoSearchbar extends StatefulWidget {
-  const DemoSearchbar({super.key});
+class Joined extends StatefulWidget {
+  const Joined({super.key});
 
   @override
-  State<DemoSearchbar> createState() => _DemoSearchbarState();
+  State<Joined> createState() => _JoinedState();
 }
 
-class _DemoSearchbarState extends State<DemoSearchbar> {
+class _JoinedState extends State<Joined> {
   String beach = "";
   String user = "";
   LatLng? usercoor;
@@ -24,7 +22,7 @@ class _DemoSearchbarState extends State<DemoSearchbar> {
   TextEditingController placename = TextEditingController();
   List<dynamic> autocompleteResults = [];
 
-  //user Location
+  // Fetch User Location
   Future<Position> getuserlocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -50,13 +48,10 @@ class _DemoSearchbarState extends State<DemoSearchbar> {
     return await Geolocator.getCurrentPosition();
   }
 
-  // Get Beach Location
+  // Fetch Beach Location
   getdetails() async {
     if (placename.text.isNotEmpty) {
       final res = await searchLocation(placename.text);
-      // beachcoor = LatLng(latlon.last.latitude, latlon.last.longitude);
-      // var res = await searchLocation(placename.text);
-      // print('res ${res[0]['lat']}');
       beachcoor = LatLng(
           double.tryParse(res[0]['lat'])!, double.tryParse(res[0]['lon'])!);
       print(beachcoor);
@@ -75,6 +70,7 @@ class _DemoSearchbarState extends State<DemoSearchbar> {
     setState(() {});
   }
 
+  // Fetch Autocomplete Results
   Future<void> fetchAutocompleteResults(String query) async {
     if (query.isEmpty) return;
 
@@ -108,54 +104,66 @@ class _DemoSearchbarState extends State<DemoSearchbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: TextField(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: TextField(
+          controller: placename,
+          decoration: const InputDecoration(
+              hintText: "Please enter Beach name",
+              hintStyle: TextStyle(
+                color: Colors.white,
+              )),
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
             controller: placename,
             decoration: const InputDecoration(
-                hintText: "Please enter Beach name",
-                hintStyle: TextStyle(
-                  color: Colors.white,
-                )),
-          ),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: placename,
-              decoration: const InputDecoration(
-                labelText: "Beach Name",
-                hintText: "Please enter Beach name",
-                prefixIcon: Icon(Icons.location_on),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                ),
+              labelText: "Beach Name",
+              hintText: "Please enter Beach name",
+              prefixIcon: Icon(Icons.location_on),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
               ),
-              onChanged: (String val) {
-                fetchAutocompleteResults(val);
+            ),
+            onChanged: (String val) {
+              fetchAutocompleteResults(val);
+            },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: autocompleteResults.length,
+              itemBuilder: (context, index) {
+                var result = autocompleteResults[index];
+                return ListTile(
+                  title: Text(result['display_name']),
+                  onTap: () {
+                    setState(() {
+                      placename.text = result['display_name'];
+                      coordinates = "${result['lat']},${result['lon']}";
+                      beachcoor = LatLng(double.parse(result['lat']),
+                          double.parse(result['lon']));
+                    });
+
+                    // Navigate to the map screen with the selected beach coordinates
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RouteStaticFinding(
+                          beachcoordinates: beachcoor!,
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: autocompleteResults.length,
-                itemBuilder: (context, index) {
-                  var result = autocompleteResults[index];
-                  return Container(
-                      child: ListTile(
-                    title: Text(result['display_name']),
-                    onTap: () {
-                      setState(() {
-                        placename.text = result['display_name'];
-                        coordinates = "${result['lat']},${result['lon']}";
-                      });
-                    },
-                  ));
-                },
-              ),
-            ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
