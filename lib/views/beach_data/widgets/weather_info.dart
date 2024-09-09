@@ -75,7 +75,7 @@ class WeatherInfoGrid extends StatelessWidget {
                 builder: (context) => WindInformationSheet(),
               ),
               icon: Icons.explore, // or use a custom icon for wind direction
-              value: windDirection,
+              value: windDirection.toString(),
               label: 'Wind Direction',
             ),
             WeatherInfoCard(
