@@ -119,6 +119,7 @@ class HomeScreen extends StatelessWidget {
                                   precipitation: 0.0,
                                   pressure: 1015.0,
                                   time: DateTime.now(), // No const here
+                                  currentDirection: 120,
                                 ),
                                 conditionList: const [],
                               ))),

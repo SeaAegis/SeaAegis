@@ -91,7 +91,7 @@ class _HourlyForecastState extends State<HourlyForecast> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "${item.time.hour}:00", // Displaying hour in HH:00 format
+                            "${item.time.hour + 5}:30", // Displaying hour in HH:00 format
                             style: TextStyle(
                               color: isSelected ? Colors.white : Colors.black,
                               fontSize: 10,

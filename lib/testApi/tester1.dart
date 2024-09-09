@@ -9,8 +9,8 @@ const double maxWindSpeedMps = 7.0;
 const double maxWaveHeightM = 2.0;
 const double maxSwellHeightM = 2.0;
 const double minVisibilityKm = 5.0;
-const double maxHumidity = 90.0;
-const double maxPrecipitation = 1.0;
+const double maxHumidity = 80.0;
+const double maxPrecipitation = 1;
 const double minPressure = 1000.0;
 
 class BeachConditions {
@@ -23,6 +23,7 @@ class BeachConditions {
   final double humidity;
   final double precipitation;
   final double pressure;
+  final double currentDirection;
   final DateTime time;
 
   BeachConditions({
@@ -36,6 +37,7 @@ class BeachConditions {
     required this.precipitation,
     required this.pressure,
     required this.time,
+    required this.currentDirection,
   });
 
   bool isSafeToVisit() {
@@ -71,21 +73,21 @@ class BeachConditions {
 
     return issues.isEmpty
         ? 'The beach conditions are safe for a visit.'
-        : 'The beach conditions are not suitable for a visit due to: ${issues.join(' ')}.';
+        : ' ${issues.join(' ')}';
   }
 }
 
 Future<List<BeachConditions>> fetchBeachConditions(
     double lat, double lng) async {
   const String params =
-      'waveHeight,airTemperature,windSpeed,visibility,humidity,waterTemperature,swellHeight,swellDirection,swellPeriod,precipitation,pressure';
+      'waveHeight,airTemperature,windSpeed,visibility,humidity,waterTemperature,swellHeight,swellDirection,swellPeriod,precipitation,pressure,currentDirection';
   final String url =
       'https://api.stormglass.io/v2/weather/point?lat=$lat&lng=$lng&params=$params';
 
   try {
     final response = await http.get(Uri.parse(url), headers: {
       'Authorization':
-          '36e0f190-69d9-11ef-968a-0242ac130004-36e0f230-69d9-11ef-968a-0242ac130004',
+          'd41eba2c-6a02-11ef-9acf-0242ac130004-d41eba90-6a02-11ef-9acf-0242ac130004',
     });
 
     if (response.statusCode == 200) {
@@ -115,19 +117,21 @@ Future<List<BeachConditions>> fetchBeachConditions(
               ((hour['precipitation']?['noaa'] as num?)?.toDouble() ?? 0.0);
           final double pressure =
               (hour['pressure']?['noaa'] as num?)?.toDouble() ?? 1013.0;
+          final double currentDirection =
+              (hour['currentDirection']?['meto']) ?? 0;
 
           conditionsList.add(BeachConditions(
-            airTempC: airTempC,
-            waterTempC: waterTempC,
-            windSpeedMps: windSpeedMps,
-            waveHeightM: waveHeightM,
-            swellHeightM: swellHeightM,
-            visibilityKm: visibilityKm,
-            humidity: humidity,
-            precipitation: precipitation,
-            pressure: pressure,
-            time: time,
-          ));
+              airTempC: airTempC,
+              waterTempC: waterTempC,
+              windSpeedMps: windSpeedMps,
+              waveHeightM: waveHeightM,
+              swellHeightM: swellHeightM,
+              visibilityKm: visibilityKm,
+              humidity: humidity,
+              precipitation: precipitation,
+              pressure: pressure,
+              time: time,
+              currentDirection: currentDirection));
         }
       }
       return conditionsList;
@@ -144,11 +148,13 @@ String formatTimeToIST(DateTime utcTime) {
   return utcTime.add(const Duration(hours: 5, minutes: 30)).toString();
 }
 
-BeachConditions? findNextSafeHour(List<BeachConditions> conditionsList) {
-  for (var condition in conditionsList) {
-    if (condition.isSafeToVisit()) {
-      return condition;
+BeachConditions? findNextSafeHour(
+    List<BeachConditions> conditionsList, int startIndex) {
+  // Loop through the list starting from the provided index
+  for (var i = startIndex; i < conditionsList.length; i++) {
+    if (conditionsList[i].isSafeToVisit()) {
+      return conditionsList[i]; // Return the first safe condition found
     }
   }
-  return null;
+  return null; // Return null if no safe condition is found
 }
