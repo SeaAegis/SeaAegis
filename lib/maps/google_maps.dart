@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart'; // Import geolocator
 
 class RouteStaticFinding extends StatefulWidget {
   final LatLng beachcoordinates;
@@ -19,10 +20,47 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
   late List<Marker> markerlist;
   Completer<GoogleMapController> mapController = Completer();
   bool isMapLoading = true;
+  LatLng? userLocation; // Store the user's current location
 
   @override
   void initState() {
     super.initState();
+    getUserLocation(); // Fetch user location on init
+    updateMapData();
+  }
+
+  // Function to get user location
+  Future<void> getUserLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied.');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied.');
+    }
+
+    // Get the user's current location
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      userLocation = LatLng(position.latitude, position.longitude);
+    });
+
+    // Update map data after getting user location
     updateMapData();
   }
 
@@ -39,22 +77,24 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
       isMapLoading = true;
     });
 
+    // If userLocation is not yet fetched, use the beach location as initial
     initial = CameraPosition(
-      target: widget.beachcoordinates,
+      target: userLocation ?? widget.beachcoordinates,
       zoom: 10.0,
     );
 
     markerlist = [
       Marker(
-        markerId: const MarkerId("First"),
+        markerId: const MarkerId("Beach"),
         position: widget.beachcoordinates,
         infoWindow: const InfoWindow(title: "Beach Location"),
       ),
-      Marker(
-        markerId: const MarkerId("Second"),
-        position: LatLng(16.568832268152413, 81.52601929516328),
-        infoWindow: const InfoWindow(title: "User Location"),
-      ),
+      if (userLocation != null)
+        Marker(
+          markerId: const MarkerId("User"),
+          position: userLocation!,
+          infoWindow: const InfoWindow(title: "User Location"),
+        ),
     ];
 
     final controller = await mapController.future;

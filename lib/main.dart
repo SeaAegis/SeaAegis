@@ -11,6 +11,7 @@ import 'package:seaaegis/helpers/theme_data.dart';
 // import 'package:seaaegis/views/home/widgets/searchbar.dart';
 // import 'package:seaaegis/screens/home/searchbar.dart';
 import 'package:seaaegis/maps/demo_searchbar.dart';
+import 'package:seaaegis/maps/get_user_location.dart';
 import 'package:seaaegis/maps/getuserlocation.dart';
 import 'package:seaaegis/maps/google_maps.dart';
 import 'package:seaaegis/maps/joined.dart';
@@ -31,20 +32,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: AppProviders.providers,
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'SeaAeigs',
-          themeMode: ThemeMode.system,
-          theme: lightTheme.copyWith(
-              textTheme: GoogleFonts.dmSansTextTheme(
-            Theme.of(context).textTheme,
-          )),
-          // darkTheme: darkTheme.copyWith(
-          //     textTheme: GoogleFonts.dmSansTextTheme(
-          //   Theme.of(context).textTheme,
-          // )),
-          home: Joined()),
-    );
+        providers: AppProviders.providers,
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'SeaAeigs',
+            themeMode: ThemeMode.system,
+            theme: lightTheme.copyWith(
+                textTheme: GoogleFonts.dmSansTextTheme(
+              Theme.of(context).textTheme,
+            )),
+            // darkTheme: darkTheme.copyWith(
+            //     textTheme: GoogleFonts.dmSansTextTheme(
+            //   Theme.of(context).textTheme,
+            // )),
+            home: UserCurrentLocation()));
   }
 }
