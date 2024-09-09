@@ -3,17 +3,14 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MapLauncherDemo extends StatelessWidget {
-  // Function to open the map selection sheet
   Future<void> openMapsSheet(BuildContext context) async {
     try {
-      // Define coordinates and title for the marker
       final coords = Coords(37.759392, -122.5107336);
       final title = "Ocean Beach";
-
-      // Get the list of installed maps
       final availableMaps = await MapLauncher.installedMaps;
 
-      // Show modal bottom sheet
+      print('Available Maps: $availableMaps'); // Debugging statement
+
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -24,7 +21,8 @@ class MapLauncherDemo extends StatelessWidget {
                   for (var map in availableMaps)
                     ListTile(
                       onTap: () async {
-                        // Show marker in selected map
+                        print(
+                            'Launching map: ${map.mapName}'); // Debugging statement
                         await map.showMarker(
                           coords: coords,
                           title: title,
@@ -45,7 +43,7 @@ class MapLauncherDemo extends StatelessWidget {
         },
       );
     } catch (e) {
-      print(e);
+      print('Error: $e'); // Debugging statement
     }
   }
 

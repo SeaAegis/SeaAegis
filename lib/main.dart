@@ -15,7 +15,7 @@ import 'package:seaaegis/maps/demo_searchbar.dart';
 import 'package:seaaegis/maps/getuserlocation.dart';
 import 'package:seaaegis/maps/google_maps.dart';
 import 'package:seaaegis/maps/joined.dart';
-import 'package:seaaegis/maps/practise.dart';
+import 'package:seaaegis/maps/using_google_maps.dart';
 import 'package:seaaegis/maps/static_marker.dart';
 import 'package:seaaegis/views/home/widgets/searchbar.dart';
 
