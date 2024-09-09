@@ -20,7 +20,7 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
   late List<Marker> markerlist;
   Completer<GoogleMapController> mapController = Completer();
   bool isMapLoading = true;
-  LatLng? userLocation; // Store the user's current location
+  LatLng? userLocation = LatLng(16.566222371638474, 81.5225554105058);
 
   @override
   void initState() {
@@ -60,7 +60,6 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
       userLocation = LatLng(position.latitude, position.longitude);
     });
 
-    // Update map data after getting user location
     updateMapData();
   }
 
