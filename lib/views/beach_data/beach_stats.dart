@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:seaaegis/testApi/tester1.dart';
-
 import 'package:seaaegis/views/beach_data/widgets/alert_box.dart';
 import 'package:seaaegis/views/beach_data/widgets/hourly_data.dart';
 import 'package:seaaegis/views/beach_data/widgets/weather_info.dart';
@@ -17,16 +16,19 @@ class BeachStats extends StatefulWidget {
 }
 
 class _BeachStatsState extends State<BeachStats> {
+  int selectedHourIndex = 0; // Initialize to the nearest hour (or first hour)
+
   @override
   Widget build(BuildContext context) {
-    final condition = widget.beachConditions;
+    final condition =
+        widget.conditionList[selectedHourIndex]; // Get the selected hour's data
     final conditionList = widget.conditionList;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Your existing UI code
             const BasicAppBar(
               title: Text(
                 'Beach Name',
@@ -38,8 +40,14 @@ class _BeachStatsState extends State<BeachStats> {
               centerTitle: true,
             ),
             const SizedBox(height: 12),
+            // Pass a callback function to update the selected hour
             HourlyForecast(
               conditionList: conditionList,
+              onHourSelected: (int index) {
+                setState(() {
+                  selectedHourIndex = index; // Update the selected hour index
+                });
+              },
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8)

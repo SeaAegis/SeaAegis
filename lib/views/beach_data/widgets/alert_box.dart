@@ -53,7 +53,9 @@ class _AlertBoxState extends State<AlertBox> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Best time to go: ${bestTimeToGo.substring(0, 16)}',
+              !isSafeToGo
+                  ? 'Best time to go: ${bestTimeToGo.substring(0, 16)}'
+                  : "You can visit now",
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
