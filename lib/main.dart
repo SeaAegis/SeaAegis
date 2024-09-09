@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         //     textTheme: GoogleFonts.dmSansTextTheme(
         //   Theme.of(context).textTheme,
         // )),
-        home: const HomePage(),
+        home: HomePage(),
         // home: const BeachStats(),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:seaaegis/providers/app_theme.dart';
+import 'package:seaaegis/testApi/tester1.dart';
 import 'package:seaaegis/views/alerts/alert_message.dart';
 import 'package:seaaegis/views/beach_data/beach_stats.dart';
 import 'package:seaaegis/views/favorites/favorite.dart';
@@ -106,7 +107,21 @@ class HomeScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const BeachStats())),
+                          builder: (context) => BeachStats(
+                                beachConditions: BeachConditions(
+                                  airTempC: 23.0,
+                                  waterTempC: 24.0,
+                                  windSpeedMps: 5.0,
+                                  waveHeightM: 1.5,
+                                  swellHeightM: 1.2,
+                                  visibilityKm: 10.0,
+                                  humidity: 65.0,
+                                  precipitation: 0.0,
+                                  pressure: 1015.0,
+                                  time: DateTime.now(), // No const here
+                                ),
+                                conditionList: const [],
+                              ))),
                       child: Container(
                         width: 140,
                         height: 160,

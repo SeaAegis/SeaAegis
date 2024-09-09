@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:smooth_compass/utils/src/compass_ui.dart';
+// import 'package:smooth_compass/utils/src/compass_ui.dart';
 
 class CompassScreen extends StatelessWidget {
   const CompassScreen({super.key});
@@ -21,13 +21,13 @@ class CompassScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          Expanded(
-            child: SmoothCompass(
-              rotationSpeed: 200,
-              height: 300,
-              width: 300,
-            ),
-          ),
+          // Expanded(
+          //     // child: SmoothCompass(
+          //     //   rotationSpeed: 200,
+          //     //   height: 300,
+          //     //   width: 300,
+          //     // ),
+          //     ),
         ],
       ),
     );

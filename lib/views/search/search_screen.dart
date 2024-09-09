@@ -1,8 +1,9 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:seaaegis/services/search/search_service.dart';
+import 'package:seaaegis/testApi/tester1.dart';
 import 'package:seaaegis/views/beach_data/beach_stats.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -19,7 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<void> getdetails() async {
     if (placename.text.isNotEmpty) {
       final res = await SearchService.searchLocation(placename.text);
-      print("Searched coordinaes : res[0]['display_name']");
+      print("Searched coordinates: ${res[0]['display_name']}");
     } else {
       showDialog(
         context: context,
@@ -37,7 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if (query.isEmpty) return;
 
     final url = Uri.parse(
-      'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=5',
+      'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=3',
     );
 
     final response = await http.get(url);
@@ -49,6 +50,23 @@ class _SearchScreenState extends State<SearchScreen> {
       });
     } else {
       throw Exception('Failed to load autocomplete results');
+    }
+  }
+
+  void _onLocationSelected(double lat, double lon) async {
+    try {
+      List<BeachConditions> conditionsList =
+          await fetchBeachConditions(lat, lon);
+      BeachConditions currentCondition = conditionsList.first;
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => BeachStats(
+              beachConditions: currentCondition, conditionList: conditionsList),
+        ),
+      );
+    } catch (e) {
+      print('Error fetching beach conditions: $e');
     }
   }
 
@@ -75,18 +93,17 @@ class _SearchScreenState extends State<SearchScreen> {
               itemCount: autocompleteResults.length,
               itemBuilder: (context, index) {
                 var result = autocompleteResults[index];
-                return Container(
-                    child: ListTile(
+                return ListTile(
                   title: Text(result['display_name']),
                   onTap: () {
                     setState(() {
-                      placename.text = result['display_name'];
                       coordinates = "${result['lat']},${result['lon']}";
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const BeachStats()));
+                      double lat = double.parse(result['lat']);
+                      double lon = double.parse(result['lon']);
+                      _onLocationSelected(lat, lon);
                     });
                   },
-                ));
+                );
               },
             ),
           ),
