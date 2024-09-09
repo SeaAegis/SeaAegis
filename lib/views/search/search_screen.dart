@@ -35,6 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> fetchAutocompleteResults(String query) async {
+    print('hiiii');
     if (query.isEmpty) return;
 
     final url = Uri.parse(
@@ -58,13 +59,14 @@ class _SearchScreenState extends State<SearchScreen> {
       List<BeachConditions> conditionsList =
           await fetchBeachConditions(lat, lon);
       BeachConditions currentCondition = conditionsList.first;
-
+      print('navigation');
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => BeachStats(
               beachConditions: currentCondition, conditionList: conditionsList),
         ),
       );
+      setState(() {});
     } catch (e) {
       print('Error fetching beach conditions: $e');
     }
