@@ -75,7 +75,7 @@ class _AlertBoxState extends State<AlertBox> {
                     offset: Offset(0.3, 0.3),
                   ),
                 ],
-                fontSize: 23,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -35,9 +35,9 @@ class _HourlyForecastState extends State<HourlyForecast> {
 
             // Check if the current item is the first in the list or if the day has changed
             final bool isNewDay = index == 0 ||
-                (formatTimeToIST(item.time).substring(0, 10) !=
+                (formatTimeToIST(item.time).substring(0, 11) !=
                     formatTimeToIST(widget.conditionList[index - 1].time)
-                        .substring(0, 10));
+                        .substring(0, 11));
 
             return GestureDetector(
               // Add onTap for hour selection
@@ -56,7 +56,11 @@ class _HourlyForecastState extends State<HourlyForecast> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 4.0),
                         child: Text(
-                          "${item.time.day}/${item.time.month}/${item.time.year}",
+                          formatTimeToIST(item.time)
+                              .substring(0, 10)
+                              .split("-")
+                              .reversed
+                              .join("-"),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,

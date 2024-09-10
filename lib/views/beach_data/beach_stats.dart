@@ -140,7 +140,7 @@ class _BeachStatsState extends State<BeachStats> {
                       children: [
                         const Image(
                           height: 150,
-                          width: 140,
+                          width: 120,
                           image: AssetImage('assets/weather/small_rain.png'),
                         ),
                         Column(
@@ -160,7 +160,7 @@ class _BeachStatsState extends State<BeachStats> {
                               '${condition.airTempC}°C',
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 42,
+                                fontSize: 32,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
