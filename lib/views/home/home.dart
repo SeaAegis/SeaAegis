@@ -9,11 +9,16 @@ import 'package:seaaegis/widgets/basic_app_bar.dart';
 import 'package:seaaegis/views/home/widgets/search_text_field.dart';
 import 'package:seaaegis/testApi/tester1.dart'; // For fetchBeachConditions
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final Function()? onBack;
 
-  HomeScreen({super.key, this.onBack});
+  const HomeScreen({super.key, this.onBack});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final List<Beach> beaches = [
     Beach(
       image: 'assets/images/2633.jpg',
@@ -130,7 +135,11 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    TextButton(onPressed: () {}, child: const Text('See More')),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {});
+                        },
+                        child: const Text('See More')),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -144,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () =>
+                      onDoubleTap: () =>
                           _navigateToBeachStats(context, beaches[index]),
                       child: Container(
                         width: 140,
@@ -163,10 +172,20 @@ class HomeScreen extends StatelessWidget {
                               top: 10,
                               child: CircleAvatar(
                                 backgroundColor: Colors.grey.shade100,
-                                child: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.black,
-                                  size: 28,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.favorite,
+                                    color: beaches[index].liked
+                                        ? Colors.red
+                                        : Colors
+                                            .white, // Use the liked property
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      beaches[index].liked = !beaches[index]
+                                          .liked; // Toggle the liked status
+                                    });
+                                  },
                                 ),
                               ),
                             ),
@@ -215,7 +234,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      HomeScreen(), // This is the updated HomeScreen
+      const HomeScreen(), // This is the updated HomeScreen
       const Favorites(),
       const AlertMessage(),
     ];
@@ -284,11 +303,12 @@ class Beach {
   final String name;
   final double lat;
   final double lon;
+  bool liked;
 
-  Beach({
-    required this.lat,
-    required this.lon,
-    required this.image,
-    required this.name,
-  });
+  Beach(
+      {required this.lat,
+      required this.lon,
+      required this.image,
+      required this.name,
+      this.liked = false});
 }

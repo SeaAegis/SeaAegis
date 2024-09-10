@@ -87,7 +87,7 @@ Future<List<BeachConditions>> fetchBeachConditions(
   try {
     final response = await http.get(Uri.parse(url), headers: {
       'Authorization':
-          '63f57188-69cf-11ef-a732-0242ac130004-63f571f6-69cf-11ef-a732-0242ac130004',
+          '36e0f190-69d9-11ef-968a-0242ac130004-36e0f230-69d9-11ef-968a-0242ac130004',
     });
 
     if (response.statusCode == 200) {

@@ -18,7 +18,7 @@ class AlertBox extends StatefulWidget {
 class _AlertBoxState extends State<AlertBox> {
   String formatTimeToIST(DateTime dateTime) {
     // Convert UTC time to IST
-    final istTime = dateTime.toUtc().add(Duration(hours: 5, minutes: 30));
+    final istTime = dateTime.toUtc().add(const Duration(hours: 5, minutes: 30));
 
     // Format the time to Indian Standard Time (IST) format (HH:mm, dd/MM/yyyy)
     return "${istTime.hour.toString().padLeft(2, '0')}:${istTime.minute.toString().padLeft(2, '0')}, ${istTime.day.toString().padLeft(2, '0')}/${istTime.month.toString().padLeft(2, '0')}/${istTime.year}";
@@ -68,7 +68,14 @@ class _AlertBoxState extends State<AlertBox> {
                   : 'Unsafe conditions: ${condition.getSafetyIssues()}',
               style: TextStyle(
                 color: isSafeToGo ? Colors.green : Colors.red,
-                fontSize: 18,
+                shadows: const [
+                  Shadow(
+                    blurRadius: 0.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    offset: Offset(0.3, 0.3),
+                  ),
+                ],
+                fontSize: 23,
                 fontWeight: FontWeight.bold,
               ),
             ),
