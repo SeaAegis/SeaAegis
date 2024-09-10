@@ -44,7 +44,6 @@ class _JoinedState extends State<Joined> {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-
     return await Geolocator.getCurrentPosition();
   }
 
@@ -79,6 +78,7 @@ class _JoinedState extends State<Joined> {
     );
 
     final response = await http.get(url);
+    print(response);
 
     if (response.statusCode == 200) {
       var res = json.decode(response.body);
@@ -147,13 +147,12 @@ class _JoinedState extends State<Joined> {
                       beachcoor = LatLng(double.parse(result['lat']),
                           double.parse(result['lon']));
                     });
-
-                    // Navigate to the map screen with the selected beach coordinates
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => RouteStaticFinding(
                           beachcoordinates: beachcoor!,
+                          beachname: result["display_name"],
                         ),
                       ),
                     );

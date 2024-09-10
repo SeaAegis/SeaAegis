@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart'; // Import geolocator
+import 'package:geolocator/geolocator.dart';
+import 'package:seaaegis/maps/foursquare_static.dart'; // Import geolocator
 
 class RouteStaticFinding extends StatefulWidget {
   final LatLng beachcoordinates;
+  final String beachname;
 
   const RouteStaticFinding({
-    super.key,
+  super.key,
     required this.beachcoordinates,
+    required this.beachname,
   });
 
   @override
@@ -20,12 +23,13 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
   late List<Marker> markerlist;
   Completer<GoogleMapController> mapController = Completer();
   bool isMapLoading = true;
-  LatLng? userLocation = LatLng(16.566222371638474, 81.5225554105058);
+  bool isFocusOnbeach=true;
+  LatLng? userLocation = const LatLng(16.566222371638474, 81.5225554105058);
 
   @override
   void initState() {
     super.initState();
-    getUserLocation(); // Fetch user location on init
+    getUserLocation(); 
     updateMapData();
   }
 
@@ -53,14 +57,13 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
     }
 
     // Get the user's current location
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    // Position position = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
+    // setState(() {
+    //   userLocation = LatLng(position.latitude, position.longitude);
+    // });
 
-    setState(() {
-      userLocation = LatLng(position.latitude, position.longitude);
-    });
-
-    updateMapData();
+    // updateMapData();
   }
 
   @override
@@ -76,9 +79,8 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
       isMapLoading = true;
     });
 
-    // If userLocation is not yet fetched, use the beach location as initial
     initial = CameraPosition(
-      target: userLocation ?? widget.beachcoordinates,
+      target: widget.beachcoordinates,
       zoom: 10.0,
     );
 
@@ -86,13 +88,13 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
       Marker(
         markerId: const MarkerId("Beach"),
         position: widget.beachcoordinates,
-        infoWindow: const InfoWindow(title: "Beach Location"),
+        infoWindow: InfoWindow(title: widget.beachname),
       ),
       if (userLocation != null)
         Marker(
           markerId: const MarkerId("User"),
           position: userLocation!,
-          infoWindow: const InfoWindow(title: "User Location"),
+          infoWindow: const InfoWindow(title: "Vishnu Institute of Technology, Bhimavaram"),
         ),
     ];
 
@@ -101,6 +103,19 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
 
     setState(() {
       isMapLoading = false;
+    });
+  }
+
+   void toggleFocus() async {
+    final controller = await mapController.future;
+    CameraPosition targetPosition = isFocusOnbeach
+        ? CameraPosition(target: widget.beachcoordinates, zoom: 10.0)
+        : CameraPosition(target: userLocation!, zoom: 10.0);
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(targetPosition));
+
+    setState(() {
+      isFocusOnbeach = !isFocusOnbeach;
     });
   }
 
@@ -125,6 +140,18 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
             const Center(
               child: CircularProgressIndicator(),
             ),
+
+           Positioned(
+          bottom: 70.0,
+          right: 60.0,
+          child: FloatingActionButton(
+            onPressed: toggleFocus,
+            tooltip: 'Toggle Focus',
+            child: Icon(isFocusOnbeach ? Icons.location_on : Icons.map),
+          ),
+        ),
+
+          PlacesSearchScreen(beachcoor: widget.beachcoordinates,)
         ],
       ),
     );
