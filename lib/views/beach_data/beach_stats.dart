@@ -184,6 +184,8 @@ class _BeachStatsState extends State<BeachStats> {
               visibility: condition.visibilityKm,
               precipitation: condition.precipitation,
               humidity: condition.humidity,
+              time: condition.time,
+              conditionList: conditionList,
             ),
           ],
         ),

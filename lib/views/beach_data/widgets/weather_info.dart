@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/testApi/tester1.dart';
 import 'package:seaaegis/views/beach_data/bottom_sheet/wave_heights.dart';
 import 'package:seaaegis/views/beach_data/bottom_sheet/wind_speed.dart';
 
@@ -9,6 +10,8 @@ class WeatherInfoGrid extends StatelessWidget {
   final double visibility;
   final double precipitation;
   final double humidity;
+  final DateTime time;
+  final List<BeachConditions> conditionList;
 
   const WeatherInfoGrid({
     super.key,
@@ -18,6 +21,8 @@ class WeatherInfoGrid extends StatelessWidget {
     required this.visibility,
     required this.precipitation,
     required this.humidity,
+    required this.time,
+    required this.conditionList,
   });
 
   @override
@@ -58,7 +63,9 @@ class WeatherInfoGrid extends StatelessWidget {
 
                 showDragHandle: true,
                 context: context,
-                builder: (context) => WindInformationSheet(),
+                builder: (context) => WindInformationSheet(
+                  conditionList: conditionList,
+                ),
               ),
               icon: Icons.air,
               value: '$windSpeed km/h',
@@ -72,7 +79,9 @@ class WeatherInfoGrid extends StatelessWidget {
 
                 showDragHandle: true,
                 context: context,
-                builder: (context) => WindInformationSheet(),
+                builder: (context) => WindInformationSheet(
+                  conditionList: conditionList,
+                ),
               ),
               icon: Icons.explore, // or use a custom icon for wind direction
               value: windDirection.toString(),
