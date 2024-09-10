@@ -12,10 +12,11 @@ import 'package:seaaegis/maps/beach_data_ui.dart';
 // import 'package:seaaegis/views/home/widgets/searchbar.dart';
 // import 'package:seaaegis/screens/home/searchbar.dart';
 import 'package:seaaegis/maps/demo_searchbar.dart';
+import 'package:seaaegis/maps/foursquare.dart';
 import 'package:seaaegis/maps/getuserlocation.dart';
 import 'package:seaaegis/maps/google_maps.dart';
 import 'package:seaaegis/maps/joined.dart';
-import 'package:seaaegis/maps/using_google_maps.dart';
+import 'package:seaaegis/maps/connecting_our_app_to_google_maps.dart';
 import 'package:seaaegis/maps/static_marker.dart';
 import 'package:seaaegis/views/home/widgets/searchbar.dart';
 
@@ -46,6 +47,6 @@ class MyApp extends StatelessWidget {
             //     textTheme: GoogleFonts.dmSansTextTheme(
             //   Theme.of(context).textTheme,
             // )),
-            home: MapLauncherDemo()));
+            home: const PlacesSearchScreen()));
   }
 }
