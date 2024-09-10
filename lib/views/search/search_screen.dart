@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/model/beach.dart';
 import 'package:seaaegis/services/search/search_service.dart';
 import 'package:seaaegis/testApi/tester1.dart';
 import 'package:seaaegis/views/beach_data/beach_stats.dart';
@@ -16,7 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String coordinates = "";
   TextEditingController placename = TextEditingController();
   List<dynamic> autocompleteResults = [];
-
+  late BeachDetails beachDetails;
   Future<void> getdetails() async {
     if (placename.text.isNotEmpty) {
       final res = await SearchService.searchLocation(placename.text);
@@ -35,7 +36,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> fetchAutocompleteResults(String query) async {
-    print('hiiii');
     if (query.isEmpty) return;
 
     final url = Uri.parse(
@@ -59,11 +59,14 @@ class _SearchScreenState extends State<SearchScreen> {
       List<BeachConditions> conditionsList =
           await fetchBeachConditions(lat, lon);
       BeachConditions currentCondition = conditionsList.first;
-      print('navigation');
+      // print('navigation');
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => BeachStats(
-              beachConditions: currentCondition, conditionList: conditionsList),
+            beachConditions: currentCondition,
+            conditionList: conditionsList,
+            beachDetails: beachDetails,
+          ),
         ),
       );
       setState(() {});
@@ -98,8 +101,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 return ListTile(
                   title: Text(result['display_name']),
                   onTap: () {
+                    print(result);
                     setState(() {
+                      BeachDetails beachDetails = BeachDetails.fromJson(result);
+                      // print(beachDetails.name);
                       coordinates = "${result['lat']},${result['lon']}";
+
                       double lat = double.parse(result['lat']);
                       double lon = double.parse(result['lon']);
                       _onLocationSelected(lat, lon);

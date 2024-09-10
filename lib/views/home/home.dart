@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:seaaegis/model/beach.dart';
 import 'package:seaaegis/providers/app_theme.dart';
 import 'package:seaaegis/views/alerts/alert_message.dart';
 import 'package:seaaegis/views/beach_data/beach_stats.dart';
@@ -51,6 +53,16 @@ class HomeScreen extends StatelessWidget {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => BeachStats(
+            beachDetails: BeachDetails(
+                latLng: LatLng(beach.lat, beach.lon),
+                placeClass: 'placeClass',
+                type: 'beach',
+                addressType: 'village',
+                name: beach.name,
+                district: 'district',
+                state: 'state',
+                pincode: 'pincode',
+                country: 'India'),
             beachConditions:
                 beachConditions[0], // Show the first condition for now
             conditionList: beachConditions, // Pass the entire list if needed
