@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+
 import 'package:seaaegis/testApi/tester1.dart';
 
 class HourlyForecast extends StatefulWidget {
@@ -17,7 +17,7 @@ class HourlyForecast extends StatefulWidget {
 }
 
 class _HourlyForecastState extends State<HourlyForecast> {
-  int selectedIndex = -1;
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Padding(

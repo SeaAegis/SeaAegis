@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/model/beach.dart';
 import 'package:seaaegis/testApi/tester1.dart';
 import 'package:seaaegis/views/beach_data/widgets/alert_box.dart';
 import 'package:seaaegis/views/beach_data/widgets/hourly_data.dart';
@@ -8,11 +9,13 @@ import 'package:seaaegis/widgets/basic_app_bar.dart';
 class BeachStats extends StatefulWidget {
   final BeachConditions beachConditions;
   final List<BeachConditions> conditionList;
+  final BeachDetails beachDetails;
 
   const BeachStats({
     super.key,
     required this.beachConditions,
     required this.conditionList,
+    required this.beachDetails,
   });
 
   @override
@@ -89,10 +92,10 @@ class _BeachStatsState extends State<BeachStats> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const BasicAppBar(
+            BasicAppBar(
               title: Text(
-                'Beach Name',
-                style: TextStyle(
+                widget.beachDetails.name,
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
