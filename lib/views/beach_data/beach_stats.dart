@@ -4,6 +4,7 @@ import 'package:seaaegis/testApi/tester1.dart';
 import 'package:seaaegis/views/beach_data/widgets/alert_box.dart';
 import 'package:seaaegis/views/beach_data/widgets/hourly_data.dart';
 import 'package:seaaegis/views/beach_data/widgets/weather_info.dart';
+import 'package:seaaegis/views/maps/mapsscreen.dart';
 import 'package:seaaegis/widgets/basic_app_bar.dart';
 
 class BeachStats extends StatefulWidget {
@@ -108,13 +109,36 @@ class _BeachStatsState extends State<BeachStats> {
                   Text(
                     "${widget.beachDetails.district}, ${widget.beachDetails.state}",
                     style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey),
+                        color: Colors.black54),
                   ),
                 ],
               ),
               centerTitle: true,
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapsScreen(
+                            details: widget.beachDetails,
+                            beachcoordinates: widget.beachDetails.latLng,
+                            beachname: widget.beachDetails.name,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.map,
+                      size: 32,
+                      color: Colors.black,
+                    )),
+                const SizedBox(
+                  width: 24,
+                )
+              ],
             ),
             const SizedBox(height: 12),
             // Pass a callback function to update the selected hour

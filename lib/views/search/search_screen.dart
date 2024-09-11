@@ -18,10 +18,10 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController placename = TextEditingController();
   List<dynamic> autocompleteResults = [];
   late BeachDetails beachDetails;
+  bool isLoading = false;
   Future<void> getdetails() async {
     if (placename.text.isNotEmpty) {
       final res = await SearchService.searchLocation(placename.text);
-      print("Searched coordinates: ${res[0]['display_name']}");
     } else {
       showDialog(
         context: context,
@@ -55,12 +55,16 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _onLocationSelected(double lat, double lon) async {
+    setState(() {
+      isLoading = true;
+    });
     try {
+      print('function started');
       List<BeachConditions> conditionsList =
           await fetchBeachConditions(lat, lon);
       BeachConditions currentCondition = conditionsList.first;
       // print('navigation');
-      print(conditionsList);
+
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => BeachStats(
@@ -70,7 +74,9 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       );
-      setState(() {});
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       print('Error fetching beach conditions: $e');
     }
@@ -90,36 +96,40 @@ class _SearchScreenState extends State<SearchScreen> {
           },
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: autocompleteResults.length,
-              itemBuilder: (context, index) {
-                var result = autocompleteResults[index];
-                return ListTile(
-                  title: Text(result['display_name']),
-                  onTap: () {
-                    print(result);
-                    setState(() {
-                      beachDetails = BeachDetails.fromJson(result);
-                      // print(beachDetails.name);
-                      coordinates = "${result['lat']},${result['lon']}";
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: autocompleteResults.length,
+                    itemBuilder: (context, index) {
+                      var result = autocompleteResults[index];
+                      return ListTile(
+                        title: Text(result['display_name']),
+                        onTap: () {
+                          print(result);
+                          setState(() {
+                            beachDetails = BeachDetails.fromJson(result);
+                            // print(beachDetails.name);
+                            coordinates = "${result['lat']},${result['lon']}";
 
-                      double lat = double.parse(result['lat']);
-                      double lon = double.parse(result['lon']);
-                      _onLocationSelected(lat, lon);
-                    });
-                  },
-                );
-              },
+                            double lat = double.parse(result['lat']);
+                            double lon = double.parse(result['lon']);
+                            _onLocationSelected(lat, lon);
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Text(coordinates),
+              ],
             ),
-          ),
-          Text(coordinates),
-        ],
-      ),
     );
   }
 }

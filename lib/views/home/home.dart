@@ -11,11 +11,16 @@ import 'package:seaaegis/widgets/basic_app_bar.dart';
 import 'package:seaaegis/views/home/widgets/search_text_field.dart';
 import 'package:seaaegis/testApi/tester1.dart'; // For fetchBeachConditions
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final Function()? onBack;
 
-  HomeScreen({super.key, this.onBack});
+  const HomeScreen({super.key, this.onBack});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final List<Beach> beaches = [
     Beach(
       image: 'assets/images/2633.jpg',
@@ -45,6 +50,8 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> _navigateToBeachStats(BuildContext context, Beach beach) async {
     // Fetch the beach conditions
+
+    print('function started');
     List<BeachConditions> beachConditions =
         await fetchBeachConditions(beach.lat, beach.lon);
 
@@ -90,12 +97,25 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
           ),
           actions: [
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(size: 32, Icons.notifications_outlined)),
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: const Icon(
+                    Icons.notifications_outlined,
+                    size: 32,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context)
+                        .openEndDrawer(); // Opens the end drawer
+                  },
+                );
+              },
+            ),
             const SizedBox(width: 24),
           ],
+          // Automatically provides the hamburger menu icon to open the drawer
         ),
+        endDrawer: NotificationsDrawer(), // The side drawer
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
           child: SingleChildScrollView(
@@ -142,7 +162,11 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    TextButton(onPressed: () {}, child: const Text('See More')),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {});
+                        },
+                        child: const Text('See More')),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -156,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () =>
+                      onDoubleTap: () =>
                           _navigateToBeachStats(context, beaches[index]),
                       child: Container(
                         width: 140,
@@ -175,10 +199,20 @@ class HomeScreen extends StatelessWidget {
                               top: 10,
                               child: CircleAvatar(
                                 backgroundColor: Colors.grey.shade100,
-                                child: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.black,
-                                  size: 28,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.favorite,
+                                    color: beaches[index].liked
+                                        ? Colors.red
+                                        : Colors
+                                            .black45, // Use the liked property
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      beaches[index].liked = !beaches[index]
+                                          .liked; // Toggle the liked status
+                                    });
+                                  },
                                 ),
                               ),
                             ),
@@ -227,9 +261,9 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      HomeScreen(), // This is the updated HomeScreen
-      const Favorites(),
-      const AlertMessage(),
+      const HomeScreen(), // Home Screen
+      const Favorites(), // Favorites Screen
+      const AlertMessage(), // Alerts Screen
     ];
   }
 
@@ -296,11 +330,90 @@ class Beach {
   final String name;
   final double lat;
   final double lon;
+  bool liked;
+  Beach(
+      {required this.name,
+      required this.lat,
+      required this.lon,
+      required this.image,
+      this.liked = false});
+}
 
-  Beach({
-    required this.lat,
-    required this.lon,
-    required this.image,
-    required this.name,
-  });
+class NotificationsDrawer extends StatelessWidget {
+  // Dummy data for notifications
+  final List<Map<String, String>> beachNotifications = [
+    {
+      'beach': 'Goa',
+      'status': 'Dangerous to visit',
+      'time': "14:30",
+    },
+    {
+      'beach': 'Bapatla',
+      'status': 'Dangerous to visit',
+      'time': "16:30",
+    },
+    {
+      'beach': 'Perupalem',
+      'status': 'Dangerous to visit',
+      'time': "15:30",
+    },
+    {
+      'beach': 'Rushikonda Beach',
+      'status': 'Safe to visit',
+      'time': "10:30",
+    },
+  ];
+
+  NotificationsDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Notifications',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: beachNotifications.length,
+                itemBuilder: (context, index) {
+                  final notification = beachNotifications[index];
+                  return ListTile(
+                    leading: Icon(
+                      notification['status'] == 'Safe to visit'
+                          ? Icons.check_circle_outline
+                          : Icons.warning_amber_outlined,
+                      color: notification['status'] == 'Safe to visit'
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                    title: Text(
+                      notification['beach']!,
+                    ),
+                    subtitle: Text(
+                        "${notification['status']!} at ${notification['time']!}",
+                        style: TextStyle(
+                          color: notification['status'] == 'Safe to visit'
+                              ? Colors.green
+                              : Colors.red,
+                        )),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
