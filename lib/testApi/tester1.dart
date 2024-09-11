@@ -87,7 +87,8 @@ Future<List<BeachConditions>> fetchBeachConditions(
   try {
     final response = await http.get(Uri.parse(url), headers: {
       'Authorization':
-          'd41eba2c-6a02-11ef-9acf-0242ac130004-d41eba90-6a02-11ef-9acf-0242ac130004',
+          // 'd41eba2c-6a02-11ef-9acf-0242ac130004-d41eba90-6a02-11ef-9acf-0242ac130004',//used
+          '88279bf2-6fed-11ef-aa85-0242ac130004-88279c9c-6fed-11ef-aa85-0242ac130004',
     });
 
     if (response.statusCode == 200) {
@@ -97,8 +98,13 @@ Future<List<BeachConditions>> fetchBeachConditions(
 
       List<BeachConditions> conditionsList = [];
       for (var hour in hours) {
-        DateTime time = DateTime.parse(hour['time']);
-        if (time.isAfter(now)) {
+        // DateTime time = DateTime.parse(hour['time']);
+        DateTime utcDateTime = DateTime.parse(hour['time']).toUtc();
+
+        // Add 5 hours and 30 minutes to convert to IST
+        DateTime istDateTime =
+            utcDateTime.add(const Duration(hours: 5, minutes: 30));
+        if (istDateTime.isAfter(now)) {
           final double airTempC =
               (hour['airTemperature']?['noaa'] as num?)?.toDouble() ?? 22.0;
           final double waterTempC =
@@ -130,7 +136,7 @@ Future<List<BeachConditions>> fetchBeachConditions(
               humidity: humidity,
               precipitation: precipitation,
               pressure: pressure,
-              time: time,
+              time: istDateTime,
               currentDirection: currentDirection));
         }
       }

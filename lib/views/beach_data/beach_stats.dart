@@ -93,12 +93,26 @@ class _BeachStatsState extends State<BeachStats> {
           mainAxisSize: MainAxisSize.min,
           children: [
             BasicAppBar(
-              title: Text(
-                widget.beachDetails.name,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+              title: Column(
+                children: [
+                  Text(
+                    widget.beachDetails.name,
+                    style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "${widget.beachDetails.district}, ${widget.beachDetails.state}",
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
+                  ),
+                ],
               ),
               centerTitle: true,
             ),
@@ -187,6 +201,10 @@ class _BeachStatsState extends State<BeachStats> {
               visibility: condition.visibilityKm,
               precipitation: condition.precipitation,
               humidity: condition.humidity,
+              beachConditions: widget.beachConditions,
+
+              conditionList: widget.conditionList,
+              beachDetails: widget.beachDetails,
             ),
           ],
         ),

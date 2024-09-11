@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/model/beach.dart';
+import 'package:seaaegis/testApi/tester1.dart';
 import 'package:seaaegis/views/beach_data/bottom_sheet/wave_heights.dart';
 import 'package:seaaegis/views/beach_data/bottom_sheet/wind_speed.dart';
 
@@ -9,7 +11,9 @@ class WeatherInfoGrid extends StatelessWidget {
   final double visibility;
   final double precipitation;
   final double humidity;
-
+  final BeachConditions beachConditions;
+  final List<BeachConditions> conditionList;
+  final BeachDetails beachDetails;
   const WeatherInfoGrid({
     super.key,
     required this.windSpeed,
@@ -18,6 +22,9 @@ class WeatherInfoGrid extends StatelessWidget {
     required this.visibility,
     required this.precipitation,
     required this.humidity,
+    required this.beachConditions,
+    required this.conditionList,
+    required this.beachDetails,
   });
 
   @override
@@ -58,10 +65,12 @@ class WeatherInfoGrid extends StatelessWidget {
 
                 showDragHandle: true,
                 context: context,
-                builder: (context) => WindInformationSheet(),
+                builder: (context) => WindInformationSheet(
+                  conditionList: conditionList,
+                ),
               ),
               icon: Icons.air,
-              value: '$windSpeed km/h',
+              value: '$windSpeed Mps',
               label: 'Wind Speed',
             ),
             WeatherInfoCard(
@@ -72,7 +81,9 @@ class WeatherInfoGrid extends StatelessWidget {
 
                 showDragHandle: true,
                 context: context,
-                builder: (context) => WindInformationSheet(),
+                builder: (context) => WindInformationSheet(
+                  conditionList: conditionList,
+                ),
               ),
               icon: Icons.explore, // or use a custom icon for wind direction
               value: windDirection.toString(),
@@ -82,7 +93,9 @@ class WeatherInfoGrid extends StatelessWidget {
               onTap: () => showModalBottomSheet(
                 showDragHandle: true,
                 context: context,
-                builder: (context) => WaveHeights(),
+                builder: (context) => WaveHeights(
+                  conditionList: conditionList,
+                ),
               ),
               icon: Icons.waves,
               value: '${waveHeight.toStringAsFixed(1)} m',

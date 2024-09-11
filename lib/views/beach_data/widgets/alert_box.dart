@@ -39,7 +39,7 @@ class _AlertBoxState extends State<AlertBox> {
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,

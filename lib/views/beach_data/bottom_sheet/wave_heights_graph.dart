@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/testApi/tester1.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TideChartBottomSheet extends StatelessWidget {
+  final List<BeachConditions> conditionList;
   final List<TideData> tideData = [
     TideData(DateTime(2023, 9, 23, 2), 10),
     TideData(DateTime(2023, 9, 23, 6), 4),
@@ -12,7 +14,7 @@ class TideChartBottomSheet extends StatelessWidget {
     TideData(DateTime(2023, 9, 24, 2), 8),
   ];
 
-  TideChartBottomSheet({super.key});
+  TideChartBottomSheet({super.key, required this.conditionList});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class TideChartBottomSheet extends StatelessWidget {
               primaryXAxis: const DateTimeAxis(
                 title: AxisTitle(text: 'Time'),
                 interval: 1,
-                labelRotation: -40,
+                labelRotation: -75,
                 intervalType: DateTimeIntervalType.hours,
                 majorGridLines: MajorGridLines(width: 0),
                 edgeLabelPlacement: EdgeLabelPlacement.shift,
@@ -47,18 +49,20 @@ class TideChartBottomSheet extends StatelessWidget {
               primaryYAxis: const NumericAxis(
                 labelFormat: '{value} ft',
                 minimum: 0,
-                maximum: 12,
-                interval: 2,
+                maximum: 10,
+                interval: 1,
               ),
               series: <CartesianSeries>[
-                SplineAreaSeries<TideData, DateTime>(
-                  dataSource: tideData,
+                SplineAreaSeries<BeachConditions, DateTime>(
+                  dataSource: conditionList.sublist(0, 10),
                   color: Colors.blue.withOpacity(0.5),
                   borderColor: Colors.blue,
                   borderWidth: 2,
-                  xValueMapper: (TideData data, _) => data.time,
-                  yValueMapper: (TideData data, _) => data.height,
+                  xValueMapper: (BeachConditions data, _) => data.time,
+                  yValueMapper: (BeachConditions data, _) =>
+                      (data.waveHeightM * 3.29),
                   dataLabelSettings: const DataLabelSettings(
+                    angle: -55,
                     isVisible: true, // Enable data labels
                     textStyle: TextStyle(
                       color: Colors.black,

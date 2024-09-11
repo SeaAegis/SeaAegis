@@ -4,7 +4,7 @@ import 'package:seaaegis/testApi/tester1.dart';
 
 class HourlyForecast extends StatefulWidget {
   final List<BeachConditions> conditionList;
-  final Function(int) onHourSelected; // Callback for when an hour is selected
+  final Function(int) onHourSelected;
 
   const HourlyForecast({
     super.key,
@@ -33,7 +33,6 @@ class _HourlyForecastState extends State<HourlyForecast> {
             final item = widget.conditionList[index];
             final bool isSelected = index == selectedIndex;
 
-            // Check if the current item is the first in the list or if the day has changed
             final bool isNewDay = index == 0 ||
                 (item.time.day != widget.conditionList[index - 1].time.day);
 
@@ -50,18 +49,18 @@ class _HourlyForecastState extends State<HourlyForecast> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
                   children: [
-                    if (isNewDay) // Add a header if the day changes
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4.0),
-                        child: Text(
-                          "${item.time.day}/${item.time.month}/${item.time.year}",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
-                          ),
+                    // if (isNewDay) // Add a header if the day changes
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4.0),
+                      child: Text(
+                        "${item.time.day}/${item.time.month}/${item.time.year}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent,
                         ),
                       ),
+                    ),
                     Container(
                       height: 100,
                       width: 60,
@@ -91,10 +90,10 @@ class _HourlyForecastState extends State<HourlyForecast> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "${item.time.hour + 5}:30", // Displaying hour in HH:00 format
+                            "${item.time.hour}:${item.time.minute}", // Displaying hour in HH:00 format
                             style: TextStyle(
                               color: isSelected ? Colors.white : Colors.black,
-                              fontSize: 10,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -104,7 +103,7 @@ class _HourlyForecastState extends State<HourlyForecast> {
                             "${item.airTempC}°", // Temperature in Celsius
                             style: TextStyle(
                               color: isSelected ? Colors.white : Colors.black54,
-                              fontSize: 12,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -119,5 +118,18 @@ class _HourlyForecastState extends State<HourlyForecast> {
         ),
       ),
     );
+  }
+
+  bool isNowInRangeWithTolerance(DateTime targetTime, int minutesTolerance) {
+    DateTime now = DateTime.now();
+    // print(targetTime);
+    // Define the start and end times with the given tolerance
+    DateTime startTime =
+        targetTime.subtract(Duration(minutes: minutesTolerance));
+    DateTime endTime = targetTime.add(Duration(minutes: minutesTolerance));
+    // print(startTime);
+    // print(endTime);
+    // Check if the current time is within the tolerance range
+    return now.isAfter(startTime) && now.isBefore(endTime);
   }
 }

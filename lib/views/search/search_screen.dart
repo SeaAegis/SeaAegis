@@ -60,6 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
           await fetchBeachConditions(lat, lon);
       BeachConditions currentCondition = conditionsList.first;
       // print('navigation');
+      print(conditionsList);
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => BeachStats(
@@ -103,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   onTap: () {
                     print(result);
                     setState(() {
-                      BeachDetails beachDetails = BeachDetails.fromJson(result);
+                      beachDetails = BeachDetails.fromJson(result);
                       // print(beachDetails.name);
                       coordinates = "${result['lat']},${result['lon']}";
 

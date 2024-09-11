@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:seaaegis/services/weather/wind_direction.dart';
+import 'package:seaaegis/testApi/tester1.dart';
 // import 'package:seaaegis/views/beach_data/bottom_sheet/compass.dart';
 
 class WindInformationSheet extends StatelessWidget {
+  final List<BeachConditions> conditionList;
   final List<Map<String, dynamic>> windData = [
     {
       'time': '11:00 AM',
@@ -35,7 +38,7 @@ class WindInformationSheet extends StatelessWidget {
     },
   ];
 
-  WindInformationSheet({super.key});
+  WindInformationSheet({super.key, required this.conditionList});
 
   @override
   Widget build(BuildContext context) {
@@ -106,42 +109,65 @@ class WindInformationSheet extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: windData.length,
+                itemCount: conditionList.length,
                 itemBuilder: (context, index) {
-                  final data = windData[index];
-                  return ListTile(
-                    leading: Icon(data['icon'], color: Colors.blue),
-                    title: Text('${data['time']}',
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold)),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 65,
+                  // final data = windData[index];
+                  final data = conditionList[index];
+                  String direction = WindDirection.getDirectionFromDegrees(
+                      data.currentDirection);
+                  final bool isNewDay = index == 0 ||
+                      (data.time.day != conditionList[index - 1].time.day);
+                  return Column(
+                    children: [
+                      if (isNewDay)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            '${data['speed']}',
+                            "${data.time.day}/${data.time.month}/${data.time.year}",
                             style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        SizedBox(
-                          width: 72,
-                          child: Text(
-                            textAlign: TextAlign.end,
-                            data['direction'],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              // color: Colors.black54,
                               fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ListTile(
+                        leading: Icon(
+                            WindDirection.getIconFromDirection(direction),
+                            color: Colors.blue),
+                        title: Text('${data.time.hour}:${data.time.minute}',
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold)),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 70,
+                              child: Text(
+                                '${data.windSpeedMps} Mps',
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            SizedBox(
+                              width: 90,
+                              child: Text(
+                                textAlign: TextAlign.end,
+                                direction,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  // color: Colors.black54,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
