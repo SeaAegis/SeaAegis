@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:seaaegis/maps/google_maps.dart';
+import 'package:seaaegis/maps/mapsscreen.dart';
 import 'package:seaaegis/services/search_service.dart';
-// import 'package:seaaegis/services/search/search_service.dart';
-// import 'package:seaaegis/views/search/widgets/google_map.dart';
 
-class DemoSearchbar extends StatefulWidget {
-  const DemoSearchbar({super.key});
+
+class SearchBarScreen extends StatefulWidget {
+  const SearchBarScreen({super.key});
 
   @override
-  State<DemoSearchbar> createState() => _DemoSearchbarState();
+  State<SearchBarScreen> createState() => _SearchBarScreenState();
 }
 
-class _DemoSearchbarState extends State<DemoSearchbar> {
+class _SearchBarScreenState extends State<SearchBarScreen> {
   String beach = "";
   String user = "";
   LatLng? usercoor;
@@ -146,12 +145,24 @@ class _DemoSearchbarState extends State<DemoSearchbar> {
                       child: ListTile(
                     title: Text(result['display_name']),
                     onTap: () {
-                      setState(() {
-                        placename.text = result['display_name'];
-                        coordinates = "${result['lat']},${result['lon']}";
-                      });
-                    },
+                    setState(() {
+                      placename.text = result['display_name'];
+                      coordinates = "${result['lat']},${result['lon']}";
+                      beachcoor = LatLng(double.parse(result['lat']),
+                          double.parse(result['lon']));
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapsScreen(
+                          beachcoordinates: beachcoor!,
+                          beachname: result["display_name"],
+                        ),
+                      ),
+                    );
+                    }
                   ));
+                
                 },
               ),
             ),

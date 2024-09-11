@@ -2,23 +2,23 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:seaaegis/maps/foursquare_static.dart'; // Import geolocator
+import 'package:seaaegis/maps/widgets/selectedbeachdata.dart'; // Import geolocator
 
-class RouteStaticFinding extends StatefulWidget {
+class MapsScreen extends StatefulWidget {
   final LatLng beachcoordinates;
   final String beachname;
 
-  const RouteStaticFinding({
+  const MapsScreen({
   super.key,
     required this.beachcoordinates,
     required this.beachname,
   });
 
   @override
-  State<RouteStaticFinding> createState() => _RouteStaticFindingState();
+  State<MapsScreen> createState() => _MapsScreenState();
 }
 
-class _RouteStaticFindingState extends State<RouteStaticFinding> {
+class _MapsScreenState extends State<MapsScreen> {
   late CameraPosition initial;
   late List<Marker> markerlist;
   Completer<GoogleMapController> mapController = Completer();
@@ -67,7 +67,7 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
   }
 
   @override
-  void didUpdateWidget(RouteStaticFinding oldWidget) {
+  void didUpdateWidget(MapsScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.beachcoordinates != oldWidget.beachcoordinates) {
       updateMapData();
@@ -121,38 +121,35 @@ class _RouteStaticFindingState extends State<RouteStaticFinding> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300.0,
-      height: 300.0,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-      ),
-      child: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: initial,
-            markers: Set<Marker>.of(markerlist),
-            onMapCreated: (controller) {
-              mapController.complete(controller);
-            },
-          ),
-          if (isMapLoading)
-            const Center(
-              child: CircularProgressIndicator(),
+    return Scaffold(
+    body: SafeArea(
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition: initial,
+              markers: Set<Marker>.of(markerlist),
+              onMapCreated: (controller) {
+                mapController.complete(controller);
+              },
             ),
-
-           Positioned(
-          bottom: 70.0,
-          right: 60.0,
-          child: FloatingActionButton(
-            onPressed: toggleFocus,
-            tooltip: 'Toggle Focus',
-            child: Icon(isFocusOnbeach ? Icons.location_on : Icons.map),
+            if (isMapLoading)
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+      
+            Positioned(
+            bottom: 70.0,
+            right: 60.0,
+            child: FloatingActionButton(
+              onPressed: toggleFocus,
+              tooltip: 'Toggle Focus',
+              child: Icon(isFocusOnbeach ? Icons.location_on : Icons.map),
+            ),
           ),
+      
+            SelectedBeachData(beachcoor: widget.beachcoordinates,)
+          ],
         ),
-
-          PlacesSearchScreen(beachcoor: widget.beachcoordinates,)
-        ],
       ),
     );
   }
