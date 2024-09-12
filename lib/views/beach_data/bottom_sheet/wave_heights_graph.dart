@@ -41,7 +41,7 @@ class TideChartBottomSheet extends StatelessWidget {
               primaryXAxis: const DateTimeAxis(
                 title: AxisTitle(text: 'Time'),
                 interval: 1,
-                labelRotation: -75,
+                labelRotation: -60,
                 intervalType: DateTimeIntervalType.hours,
                 majorGridLines: MajorGridLines(width: 0),
                 edgeLabelPlacement: EdgeLabelPlacement.shift,
@@ -52,15 +52,16 @@ class TideChartBottomSheet extends StatelessWidget {
                 maximum: 10,
                 interval: 1,
               ),
+              tooltipBehavior: TooltipBehavior(enable: true),
               series: <CartesianSeries>[
                 SplineAreaSeries<BeachConditions, DateTime>(
-                  dataSource: conditionList.sublist(0, 10),
+                  dataSource: conditionList.sublist(0, 6),
                   color: Colors.blue.withOpacity(0.5),
                   borderColor: Colors.blue,
                   borderWidth: 2,
                   xValueMapper: (BeachConditions data, _) => data.time,
                   yValueMapper: (BeachConditions data, _) =>
-                      (data.waveHeightM * 3.29),
+                      (data.waveHeightM.ceil() * 3.29),
                   dataLabelSettings: const DataLabelSettings(
                     angle: -55,
                     isVisible: true, // Enable data labels

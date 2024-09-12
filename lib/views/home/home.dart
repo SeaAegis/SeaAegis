@@ -4,6 +4,8 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:seaaegis/model/beach.dart';
 import 'package:seaaegis/providers/app_theme.dart';
+import 'package:seaaegis/providers/user_provider.dart';
+import 'package:seaaegis/services/notification/notification_service.dart';
 import 'package:seaaegis/views/alerts/alert_message.dart';
 import 'package:seaaegis/views/beach_data/beach_stats.dart';
 import 'package:seaaegis/views/favorites/favorite.dart';
@@ -252,11 +254,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late PersistentTabController _controller;
   bool showNav = true;
+  NotificationServices notificationServices = NotificationServices();
 
   @override
   void initState() {
     super.initState();
+    UserProvider userProvider = Provider.of(context, listen: false);
     _controller = PersistentTabController(initialIndex: 0);
+    notificationServices.requestNotificationPermission();
+
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    notificationServices.getDeviceToken().then((value) {
+      userProvider.setDeviceToken(value);
+      print("Device token  $value");
+    });
   }
 
   List<Widget> _buildScreens() {

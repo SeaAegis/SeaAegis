@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -276,45 +277,76 @@ class _SelectedBeachDataState extends State<SelectedBeachData> {
                         photoslinks.isNotEmpty
                             ? SizedBox(
                                 height: 300,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: photoslinks.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: 240,
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 3.0,
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black45
-                                                  .withOpacity(0.5),
-                                              blurRadius: 4.0,
-                                              spreadRadius: 2.0,
-                                              offset: const Offset(2, 3),
+                                child: StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('Beach Data')
+                                        .doc(
+                                            '${widget.beachcoor.latitude}${widget.beachcoor.longitude}')
+                                        .collection('photos')
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+
+                                      if (snapshot.hasError) {
+                                        return const Center(
+                                            child: Text(
+                                                'Error fetching photos from Firebase'));
+                                      }
+
+                                      List<String> firebasePhotoUrls = snapshot
+                                          .data!.docs
+                                          .map((doc) => doc['image'].toString())
+                                          .toList();
+
+                                      List<String> allPhotoUrls = [
+                                        ...firebasePhotoUrls,
+                                        ...photoslinks
+                                      ];
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: allPhotoUrls.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              width: 240,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 3.0,
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black45
+                                                        .withOpacity(0.5),
+                                                    blurRadius: 4.0,
+                                                    spreadRadius: 2.0,
+                                                    offset: const Offset(2, 3),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                child: Image.network(
+                                                  allPhotoUrls[index],
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
-                                          ],
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          child: Image.network(
-                                            photoslinks[index],
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                          );
+                                        },
+                                      );
+                                    }),
                               )
                             : const Text("No photos available"),
                         const SizedBox(height: 20),
@@ -327,84 +359,117 @@ class _SelectedBeachDataState extends State<SelectedBeachData> {
                         ),
                         // const SizedBox(height: 10),
                         reviewscontent.isNotEmpty
-                            //     ? SizedBox(
-                            //         height: 300,
-                            //         child: ListView.builder(
-                            //         scrollDirection: Axis.vertical,
-                            //         itemCount: reviewscontent.length,
-                            //         itemBuilder: (context, index) {
-                            //           return Container(
-                            //             margin: const EdgeInsets.symmetric(vertical: 8),
-                            //             padding: const EdgeInsets.all(15),
-                            //             decoration: BoxDecoration(
-                            //               color: Colors.white,
-                            //               borderRadius: BorderRadius.circular(15),
-                            //               border: Border.all(
-                            //                 color: Colors.grey.shade300,
-                            //                 width: 1.0,
-                            //               ),
-                            //               boxShadow: const [
-                            //                  BoxShadow(
-                            //                   color: Colors.black12,
-                            //                   blurRadius: 6.0,
-                            //                   spreadRadius: 2.0,
-                            //                   offset: Offset(0, 4),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //             child: Text(
-                            //               reviewscontent[index],
-                            //               style: const TextStyle(
-                            //                 fontSize: 18,
-                            //                 fontWeight: FontWeight.w500,
-                            //                 color: Colors.black87,
-                            //                 height: 1.5,
-                            //               ),
-                            //               textAlign: TextAlign.justify,
-                            //             ),
-                            //           );
-                            //         },
-                            //       )
-                            //     )
-                            // : const Text("No reviews found"),
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: reviewscontent.map((review) {
-                                  return Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    alignment: Alignment.centerLeft,
-                                    padding: const EdgeInsets.all(15),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                        color: Colors.grey.shade300,
-                                        width: 1.0,
-                                      ),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 6.0,
-                                          spreadRadius: 2.0,
-                                          offset: Offset(0, 4),
+                            ? StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('Beach Data')
+                                    .doc(
+                                        '${widget.beachcoor.latitude}${widget.beachcoor.longitude}')
+                                    .collection('reviews')
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  }
+
+                                  if (snapshot.hasError) {
+                                    return const Center(
+                                        child: Text(
+                                            'Error fetching reviews from Firebase'));
+                                  }
+
+                                  List<String> firebaseReviews = snapshot
+                                      .data!.docs
+                                      .map((doc) => doc['text'].toString())
+                                      .toList();
+
+                                  List<String> allReviews = [
+                                    ...firebaseReviews,
+                                    ...reviewscontent
+                                  ];
+
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: allReviews.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8),
+                                        padding: const EdgeInsets.all(15),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 1.0,
+                                          ),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black12,
+                                              blurRadius: 4.0,
+                                              spreadRadius: 2.0,
+                                              offset: Offset(2, 3),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      review,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black87,
-                                        height: 1.5,
-                                      ),
-                                      textAlign: TextAlign.justify,
-                                    ),
+                                        child: Text(
+                                          allReviews[index],
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87,
+                                            height: 1.5,
+                                          ),
+                                          textAlign: TextAlign.justify,
+                                        ),
+                                      );
+                                    },
                                   );
-                                }).toList(),
-                              )
+                                })
                             : const Text("No reviews found"),
+                        // ? Column(
+                        //     mainAxisAlignment: MainAxisAlignment.start,
+                        //     children: reviewscontent.map((review) {
+                        //       return Container(
+                        //         margin:
+                        //             const EdgeInsets.symmetric(vertical: 8),
+                        //         alignment: Alignment.centerLeft,
+                        //         padding: const EdgeInsets.all(15),
+                        //         decoration: BoxDecoration(
+                        //           color: Colors.white,
+                        //           borderRadius: BorderRadius.circular(15),
+                        //           border: Border.all(
+                        //             color: Colors.grey.shade300,
+                        //             width: 1.0,
+                        //           ),
+                        //           boxShadow: const [
+                        //             BoxShadow(
+                        //               color: Colors.black12,
+                        //               blurRadius: 6.0,
+                        //               spreadRadius: 2.0,
+                        //               offset: Offset(0, 4),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         child: Text(
+                        //           review,
+                        //           style: const TextStyle(
+                        //             fontSize: 18,
+                        //             fontWeight: FontWeight.w500,
+                        //             color: Colors.black87,
+                        //             height: 1.5,
+                        //           ),
+                        //           textAlign: TextAlign.justify,
+                        //         ),
+                        //       );
+                        //     }).toList(),
+                        //   )
+                        // : const Text("No reviews found"),
                         const SizedBox(
                           height: 20,
                         ),

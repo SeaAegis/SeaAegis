@@ -5,40 +5,8 @@ import 'package:seaaegis/testApi/tester1.dart';
 
 class WindInformationSheet extends StatelessWidget {
   final List<BeachConditions> conditionList;
-  final List<Map<String, dynamic>> windData = [
-    {
-      'time': '11:00 AM',
-      'speed': '12 kmph',
-      'direction': 'North',
-      'icon': Icons.north
-    },
-    {
-      'time': '1:00 PM',
-      'speed': '15 kmph',
-      'direction': 'NorthEast',
-      'icon': Icons.north_east
-    },
-    {
-      'time': '3:00 PM',
-      'speed': '10 kmph',
-      'direction': 'East',
-      'icon': Icons.east
-    },
-    {
-      'time': '5:00 PM',
-      'speed': '8 kmph',
-      'direction': 'SouthEast',
-      'icon': Icons.south_east
-    },
-    {
-      'time': '7:00 PM',
-      'speed': '20 kmph',
-      'direction': 'South',
-      'icon': Icons.south
-    },
-  ];
 
-  WindInformationSheet({super.key, required this.conditionList});
+  const WindInformationSheet({super.key, required this.conditionList});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:seaaegis/providers/user_provider.dart';
+import 'package:seaaegis/services/notification/notification_service.dart';
 import 'package:seaaegis/testApi/tester1.dart';
 
 class AlertBox extends StatefulWidget {
@@ -24,11 +27,21 @@ class _AlertBoxState extends State<AlertBox> {
     return "${istTime.hour.toString().padLeft(2, '0')}:${istTime.minute.toString().padLeft(2, '0')}, ${istTime.day.toString().padLeft(2, '0')}/${istTime.month.toString().padLeft(2, '0')}/${istTime.year}";
   }
 
+  NotificationServices notificationServices = NotificationServices();
+
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of(context, listen: false);
     final condition = widget.beachConditions;
     final nextSafe = widget.nextSafe;
     bool isSafeToGo = condition.isSafeToVisit();
+    notificationServices.sendDeviceNotification(
+      deviceToken: userProvider.deviceToken,
+      title: isSafeToGo ? 'Good Time' : 'Alert Message',
+      body: isSafeToGo
+          ? 'It is safe to go to the beach'
+          : 'Unsafe conditions: ${condition.getSafetyIssues()}',
+    );
     String bestTimeToGo = isSafeToGo
         ? formatTimeToIST(condition.time)
         : nextSafe != null

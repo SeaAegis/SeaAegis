@@ -2,10 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:seaaegis/model/beach.dart';
+import 'package:seaaegis/providers/user_provider.dart';
 import 'package:seaaegis/widgets/basic_app_bar.dart';
 
+import 'widgets/review_image.dart';
 import 'widgets/selectedbeachdata.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MapsScreen extends StatefulWidget {
   final LatLng beachcoordinates;
@@ -126,60 +130,210 @@ class _MapsScreenState extends State<MapsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: BasicAppBar(
-        title: Column(
+    return Consumer<UserProvider>(builder: (context, provider, _) {
+      return Scaffold(
+        appBar: BasicAppBar(
+          title: Column(
+            children: [
+              Text(
+                widget.details.name,
+                style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                "${widget.details.district}, ${widget.details.state}",
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54),
+              ),
+            ],
+          ),
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              GoogleMap(
+                initialCameraPosition: initial,
+                markers: Set<Marker>.of(markerlist),
+                onMapCreated: (controller) {
+                  mapController.complete(controller);
+                },
+              ),
+              if (isMapLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              Positioned(
+                bottom: 70.0,
+                right: 60.0,
+                child: FloatingActionButton(
+                  onPressed: toggleFocus,
+                  tooltip: 'Toggle Focus',
+                  child: Icon(isFocusOnbeach ? Icons.location_on : Icons.map),
+                ),
+              ),
+              SelectedBeachData(
+                beachcoor: widget.beachcoordinates,
+              )
+            ],
+          ),
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(
-              widget.details.name,
-              style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+            FloatingActionButton(
+              onPressed: () async {
+                await showImagePicker(
+                  context,
+                  provider,
+                );
+                if (provider.uploadImage != null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ImageReviewScreen(
+                            latLng: widget.details.latLng,
+                            selectedImage: provider.uploadImage,
+                            provider: provider,
+                          )));
+                }
+              },
+              child: const Icon(Icons.photo),
             ),
             const SizedBox(
-              height: 5,
+              height: 12,
             ),
-            Text(
-              "${widget.details.district}, ${widget.details.state}",
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black54),
-            ),
-          ],
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition: initial,
-              markers: Set<Marker>.of(markerlist),
-              onMapCreated: (controller) {
-                mapController.complete(controller);
+            FloatingActionButton(
+              onPressed: () {
+                showReviewDialog(context, provider, widget.details.latLng);
               },
-            ),
-            if (isMapLoading)
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
-            Positioned(
-              bottom: 70.0,
-              right: 60.0,
-              child: FloatingActionButton(
-                onPressed: toggleFocus,
-                tooltip: 'Toggle Focus',
-                child: Icon(isFocusOnbeach ? Icons.location_on : Icons.map),
-              ),
-            ),
-            SelectedBeachData(
-              beachcoor: widget.beachcoordinates,
+              child: const Icon(Icons.edit),
             )
           ],
         ),
-      ),
+      );
+    });
+  }
+
+  void showReviewDialog(
+      BuildContext context, UserProvider provider, LatLng latLng) {
+    final TextEditingController reviewController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Add a Review"),
+          content: TextField(
+            controller: reviewController,
+            decoration: const InputDecoration(
+                hintStyle: TextStyle(color: Colors.black),
+                hintText: "Enter your review here"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                String review = reviewController.text;
+
+                String res = await provider.addBeachReviewText(
+                  '${latLng.latitude}${latLng.longitude}',
+                  review,
+                );
+                Navigator.of(context).pop();
+
+                if (res == 'done') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Review Added ')));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Try Once Again')));
+                }
+              },
+              child: const Text("Add"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showImagePicker(
+      BuildContext context, UserProvider provider) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24.0),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Select Image',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16.0),
+                ListTile(
+                  leading: const Icon(
+                    Icons.photo_library,
+                    // color: Colors.blue,
+                  ),
+                  title: const Text(
+                    'Gallery',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    provider.selectImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.camera_alt,
+                    // color: Colors.blue,
+                  ),
+                  title: const Text(
+                    'Camera',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    provider.selectImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                // const SizedBox(height: 16.0),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
