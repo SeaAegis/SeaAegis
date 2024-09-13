@@ -7,10 +7,11 @@ class AuthSignUp {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<UserDetails> getUserDetails() async {
-    User currentuser = auth.currentUser!;
-    DocumentSnapshot snap =
-        await firestore.collection('Users').doc(currentuser.uid).get();
-    // print(snap.data());
+    User currentUser = auth.currentUser!;
+    DocumentSnapshot snap = await firestore
+        .collection(_getCollectionName())
+        .doc(currentUser.uid)
+        .get();
     return UserDetails.fromSnapshot(snap);
   }
 
@@ -18,23 +19,25 @@ class AuthSignUp {
     required String email,
     required String password,
     required String username,
+    required bool isuser, // Updated variable name
   }) async {
-    String res = "some error occured";
+    String res = "some error occurred";
     try {
       if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty) {
-        //user signup
+        // User signup
         UserCredential cred = await auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
-        //adding user to database
+        // Adding user to database
         UserDetails userDetails = UserDetails(
-            uid: cred.user!.uid,
-            username: username,
-            email: email,
-          );
+          uid: cred.user!.uid,
+          username: username,
+          email: email,
+        );
         await firestore
-            .collection('Users')
+            .collection(
+                isuser ? 'Users' : 'Safeguards') // Updated collection name
             .doc(cred.user!.uid)
             .set(userDetails.toJson());
         res = "success";
@@ -47,7 +50,7 @@ class AuthSignUp {
       } else if (e.code == 'email-already-in-use') {
         res = 'The account already exists for that email.';
       } else if (e.code == "invalid-email") {
-        res = "Email is Badly Formated";
+        res = "Email is badly formatted";
       } else {
         res = e.message.toString();
       }
@@ -55,5 +58,15 @@ class AuthSignUp {
       res = e.toString();
     }
     return res;
+  }
+
+  // Helper method to get collection name based on the user type
+  String _getCollectionName() {
+    User currentUser = auth.currentUser!;
+    // Assuming you have a field in your UserDetails to determine the type
+    return currentUser.displayName != null &&
+            currentUser.displayName!.contains('Safeguard')
+        ? 'Safeguards'
+        : 'Users';
   }
 }

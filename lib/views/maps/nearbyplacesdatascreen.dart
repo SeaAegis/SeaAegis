@@ -14,6 +14,9 @@ class Nearbyplacesdata extends StatefulWidget {
 }
 
 class _NearbyplacesdataState extends State<Nearbyplacesdata> {
+  String authToken =
+      'fsq3OBnmL2pkxUCd5b9n8+HYJB5oFAVJikfii+RpnuOxw4o='; //Current using token
+  // String authToken = 'fsq3ZhhBHWDd8MnEL+ukzo959s3LqCZZM6puWgzwOXeuTqk='; //New Api key
   String name = "";
   String location = "";
   String placeicon = "";
@@ -26,7 +29,6 @@ class _NearbyplacesdataState extends State<Nearbyplacesdata> {
       isLoading = true;
     });
     final String apiUrl = 'https://api.foursquare.com/v3/places/$fsqid';
-    const String authToken = 'fsq3OBnmL2pkxUCd5b9n8+HYJB5oFAVJikfii+RpnuOxw4o=';
 
     try {
       final http.Response response = await http.get(
@@ -63,7 +65,6 @@ class _NearbyplacesdataState extends State<Nearbyplacesdata> {
 
   Future<void> fetchplacephotos(String fsqid) async {
     final String apiUrl = 'https://api.foursquare.com/v3/places/$fsqid/photos';
-    const String authToken = 'fsq3OBnmL2pkxUCd5b9n8+HYJB5oFAVJikfii+RpnuOxw4o=';
 
     try {
       final http.Response response = await http.get(
@@ -101,7 +102,6 @@ class _NearbyplacesdataState extends State<Nearbyplacesdata> {
 
   Future<void> fetchreviews(String fsqid) async {
     final String apiUrl = 'https://api.foursquare.com/v3/places/$fsqid/tips';
-    const String authToken = 'fsq3OBnmL2pkxUCd5b9n8+HYJB5oFAVJikfii+RpnuOxw4o=';
 
     try {
       final http.Response response = await http.get(

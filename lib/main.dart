@@ -9,7 +9,10 @@ import 'package:seaaegis/firebase_options.dart';
 // import 'package:seaaegis/views/home/google_maps.dart';
 // import 'package:seaaegis/screens/home/searchbar.dart';
 import 'package:seaaegis/helpers/theme_data.dart';
+import 'package:seaaegis/screens/home/userselection.dart';
+import 'package:seaaegis/views/auth/user/login.dart';
 import 'package:seaaegis/views/home/home.dart';
+import 'routes/routes.dart';
 
 // import 'package:seaaegis/views/home/widgets/searchbar.dart';
 @pragma('vm:entry-point')
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
         //     textTheme: GoogleFonts.dmSansTextTheme(
         //   Theme.of(context).textTheme,
         // )),
-        home: const HomePage(),
+        home: Userselection(),
         // home: const BeachStats(),
       ),
     );

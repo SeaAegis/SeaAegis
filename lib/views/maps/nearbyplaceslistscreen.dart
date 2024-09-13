@@ -21,10 +21,12 @@ class NearbyPlacesList extends StatefulWidget {
 
 class _NearbyPlacesListState extends State<NearbyPlacesList> {
   String response = "";
+  String authToken =
+      'fsq3OBnmL2pkxUCd5b9n8+HYJB5oFAVJikfii+RpnuOxw4o='; //Current using token
+  // String authToken = 'fsq3ZhhBHWDd8MnEL+ukzo959s3LqCZZM6puWgzwOXeuTqk='; //New Api key
 
   Future<void> fetchinfo(String fsqid, cee0db84cd4236a59edab63) async {
     final String apiUrl = 'https://api.foursquare.com/v3/places/$fsqid';
-    const String authToken = 'fsq3OBnmL2pkxUCd5b9n8+HYJB5oFAVJikfii+RpnuOxw4o=';
 
     try {
       final http.Response response = await http.get(

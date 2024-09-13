@@ -171,8 +171,8 @@ class _MapsScreenState extends State<MapsScreen> {
                   child: CircularProgressIndicator(),
                 ),
               Positioned(
-                bottom: 70.0,
-                right: 60.0,
+                bottom: 160.0,
+                right: 15.0,
                 child: FloatingActionButton(
                   onPressed: toggleFocus,
                   tooltip: 'Toggle Focus',
@@ -181,6 +181,7 @@ class _MapsScreenState extends State<MapsScreen> {
               ),
               SelectedBeachData(
                 beachcoor: widget.beachcoordinates,
+                userProvider: provider,
               )
             ],
           ),
