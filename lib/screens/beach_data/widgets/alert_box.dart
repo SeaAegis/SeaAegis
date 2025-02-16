@@ -107,7 +107,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seaaegis/providers/user_provider.dart';
 import 'package:seaaegis/services/notification/notification_service.dart';
-import 'package:seaaegis/testApi/tester1.dart';
+import 'package:seaaegis/services/weather/weather_conditions.dart';
 
 class AlertBox extends StatefulWidget {
   final BeachConditions beachConditions;

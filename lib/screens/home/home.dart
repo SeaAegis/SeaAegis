@@ -6,12 +6,12 @@ import 'package:seaaegis/model/beach.dart';
 import 'package:seaaegis/providers/app_theme.dart';
 import 'package:seaaegis/providers/user_provider.dart';
 import 'package:seaaegis/services/notification/notification_service.dart';
-import 'package:seaaegis/views/alerts/alert_message.dart';
-import 'package:seaaegis/views/beach_data/beach_stats.dart';
-import 'package:seaaegis/views/favorites/favorite.dart';
+import 'package:seaaegis/screens/alerts/alert_message.dart';
+import 'package:seaaegis/screens/beach_data/beach_stats.dart';
+import 'package:seaaegis/screens/favorites/favorite.dart';
 import 'package:seaaegis/widgets/basic_app_bar.dart';
-import 'package:seaaegis/views/home/widgets/search_text_field.dart';
-import 'package:seaaegis/testApi/tester1.dart'; // For fetchBeachConditions
+import 'package:seaaegis/screens/home/widgets/search_text_field.dart';
+import 'package:seaaegis/services/weather/weather_conditions.dart'; // For fetchBeachConditions
 
 class HomeScreen extends StatefulWidget {
   final Function()? onBack;

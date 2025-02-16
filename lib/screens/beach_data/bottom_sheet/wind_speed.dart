@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seaaegis/services/weather/wind_direction.dart';
-import 'package:seaaegis/testApi/tester1.dart';
+import 'package:seaaegis/services/weather/weather_conditions.dart';
 // import 'package:seaaegis/views/beach_data/bottom_sheet/compass.dart';
 
 class WindInformationSheet extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:seaaegis/views/auth/safe_guard/safeguardsignup.dart';
-import 'package:seaaegis/views/auth/user/signup.dart';
+import 'package:seaaegis/screens/auth/safe_guard/safeguardsignup.dart';
+import 'package:seaaegis/screens/auth/user/signup.dart';
 
 class Userselection extends StatelessWidget {
   @override

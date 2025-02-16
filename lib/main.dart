@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:seaaegis/app/app_providers.dart';
 import 'package:seaaegis/firebase_options.dart';
 import 'package:seaaegis/helpers/theme_data.dart';
-import 'package:seaaegis/views/home/home.dart';
+import 'package:seaaegis/screens/home/home.dart';
 
 // import 'package:seaaegis/views/home/widgets/searchbar.dart';
 @pragma('vm:entry-point')

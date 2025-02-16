@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seaaegis/views/search/search_screen.dart';
+import 'package:seaaegis/screens/search/search_screen.dart';
 
 class SearchTextField extends StatelessWidget {
   final TextEditingController? controller;

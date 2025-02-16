@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:seaaegis/model/beach.dart';
 import 'package:seaaegis/services/search/search_service.dart';
-import 'package:seaaegis/testApi/tester1.dart';
-import 'package:seaaegis/views/beach_data/beach_stats.dart';
+import 'package:seaaegis/services/weather/weather_conditions.dart';
+import 'package:seaaegis/screens/beach_data/beach_stats.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:seaaegis/backend/storage/firebase_storage.dart';
-import 'package:seaaegis/services/const/image_picker_f.dart';
+import 'package:seaaegis/utils/image_picker_f.dart';
 
 class UserProvider extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

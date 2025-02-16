@@ -1,6 +1,6 @@
-import 'package:seaaegis/views/home/home.dart';
-import 'package:seaaegis/views/auth/user/login.dart';
-import 'package:seaaegis/views/auth/user/signup.dart';
+import 'package:seaaegis/screens/home/home.dart';
+import 'package:seaaegis/screens/auth/user/login.dart';
+import 'package:seaaegis/screens/auth/user/signup.dart';
 
 class AppRoutes {
   static const String loginRoute = '/signin';

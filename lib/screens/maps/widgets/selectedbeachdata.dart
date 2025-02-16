@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:seaaegis/providers/user_provider.dart';
 import 'package:seaaegis/services/notification/notification_service.dart';
 import 'package:seaaegis/utils/custombuttons.dart';
-import 'package:seaaegis/views/maps/nearbyplaceslistscreen.dart';
+import 'package:seaaegis/screens/maps/nearbyplaceslistscreen.dart';
 
 class SelectedBeachData extends StatefulWidget {
   final LatLng beachcoor;

@@ -9,9 +9,9 @@ class SearchService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(data); // Return list of results
+      return List<Map<String, dynamic>>.from(data); 
     } else {
-      return []; // Return empty list on error
+      return [];
     }
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seaaegis/services/weather/wave_heights_conditions.dart';
-import 'package:seaaegis/testApi/tester1.dart';
+import 'package:seaaegis/services/weather/weather_conditions.dart';
 
 import 'wave_heights_graph.dart';
 
