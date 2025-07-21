@@ -26,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Beach> beaches = [
     Beach(
       image: 'assets/images/2633.jpg',
-      name: 'Goa',
-      lat: 15.539930,
-      lon: 73.763687,
+      name: 'RamaKrishna Beach',
+      lat: 17.718203197769917,
+      lon: 83.33214013943778,
     ),
     Beach(
       image: 'assets/images/5352.jpg',

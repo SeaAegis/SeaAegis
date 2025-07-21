@@ -190,7 +190,7 @@ class _NearbyplacesdataState extends State<Nearbyplacesdata> {
                           size: 30,
                         ),
                         const SizedBox(
-                          width: 10,
+                          width: 5,
                         ),
                         Expanded(
                           child: Text(

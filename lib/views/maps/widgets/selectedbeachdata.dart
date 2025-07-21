@@ -186,7 +186,7 @@ class _SelectedBeachDataState extends State<SelectedBeachData> {
               'Review Analysis',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20.0, // Larger font size
+                fontSize: 17.0, // Larger font size
               ),
             ),
             content: SingleChildScrollView(
@@ -433,9 +433,7 @@ class _SelectedBeachDataState extends State<SelectedBeachData> {
                                   fontWeight: FontWeight.w600,
                                   color: Colors.red),
                             ),
-                            const SizedBox(
-                              width: 100,
-                            ),
+                            Spacer(),
                             Center(
                                 child: CustomButtons(
                               textvalue: "Review Analysis",
